@@ -1,11 +1,11 @@
 "use client";
 
-import * as z from "zod";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { getCsrfToken } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +32,7 @@ const SignInForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "pt@gmail.com",
+      email: "pham.t.268.01@gmail.com",
       password: "thuan286",
       csrfToken: "",
     },

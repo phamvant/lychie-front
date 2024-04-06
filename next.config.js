@@ -6,3 +6,9 @@
 // };
 
 // module.exports = nextConfig;
+
+module.exports = {
+  images: {
+    domains: ["images.unsplash.com"], // Replace with your allowed domains
+  },
+};

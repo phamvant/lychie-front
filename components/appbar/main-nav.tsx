@@ -14,8 +14,8 @@ export const navBarContent = [
     href: "/dashboard",
   },
   {
-    title: "Blog",
-    href: "/blog",
+    title: "Product",
+    href: "/product",
   },
   {
     title: "Editor",

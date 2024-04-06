@@ -21,7 +21,7 @@ export const authOptions: NextAuthOptions = {
       async authorize(credential, req) {
         if (!credential?.email || !credential.password) return null;
         const { email, password } = credential;
-        const res = await fetch(process.env.BACKEND_URL + "/auth/login", {
+        const res = await fetch("http://localhost:8080" + "/auth/login", {
           method: "POST",
           body: JSON.stringify({
             email,
