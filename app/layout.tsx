@@ -4,7 +4,7 @@ import "./globals.css";
 
 import Providers from "@/components/Providers";
 import dotenv from "dotenv";
-export const fontSans = FontSans({
+const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });

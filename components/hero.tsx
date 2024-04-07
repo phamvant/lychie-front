@@ -4,9 +4,9 @@ import Link from "next/link";
 
 const HeroHeader = () => {
   return (
-    <section className="pb-12 mt-20 text-center lg:items-center lg:gap-8 h-screen bg-[url('/bg.jpeg')] bg-no-repeat bg-cover">
+    <section className="pb-12 text-center lg:items-center lg:gap-8 h-screen bg-[url('/bg.jpeg')] bg-no-repeat bg-cover">
       <div className="flex flex-1 flex-col items-center gap-4 text-center lg:gap-8">
-        <div className="space-y-4 backdrop-blur-md p-6 px-8 rounded-full">
+        <div className="space-y-4 mt-32 backdrop-blur-md p-6 px-8 rounded-full">
           <h1 className="text-4xl font-bold lg:text-6xl text-white">
             Landing pages
           </h1>

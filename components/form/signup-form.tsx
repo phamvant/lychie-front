@@ -1,10 +1,10 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import "dotenv/config";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -51,12 +51,12 @@ const SignUpForm = () => {
     setIsFetching((prev: boolean) => !prev);
     console.log(process.env.BACKEND_URL);
 
-    const res = await fetch("http://localhost:8080/auth/register", {
+    const res = await fetch("https://lychie-back.onrender.com/auth/register", {
       method: "POST",
       body: JSON.stringify({
-        username: values.username,
-        email: values.email,
-        password: values.password,
+        userUsername: values.username,
+        userEmail: values.email,
+        userPassword: values.password,
       }),
       headers: {
         "Content-Type": "application/json",

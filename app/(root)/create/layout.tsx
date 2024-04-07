@@ -1,4 +1,5 @@
 import { authOptions } from "@/lib/auth";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 import React from "react";
@@ -6,6 +7,11 @@ import CreateProductPage from "./page";
 
 type Props = {
   children: React.ReactNode;
+};
+
+export const metadata: Metadata = {
+  title: "Create Product",
+  description: "Example dashboard app built using the components.",
 };
 
 const CreateProductLayout = async (props: Props) => {
