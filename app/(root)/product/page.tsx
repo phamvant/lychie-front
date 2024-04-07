@@ -44,13 +44,13 @@ const ProductPage = ({ products }: any) => {
             <Button>Tạo sản phẩm</Button>
           </Link>
         </CardHeader>
-        <CardContent>
-          <div className="grid lg:grid-cols-4 lg:gap-x-12 lg:gap-y-20">
+        <CardContent className="pr-0 lg:pr-6">
+          <div className="grid lg:grid-cols-4 grid-cols-2 lg:gap-x-12 lg:gap-y-20">
             {kariProducts.map((product) => (
               <AlbumArtwork
                 key={product.productName}
                 product={product}
-                className="w-[240px]"
+                className="lg:w-[240px] w-[150px]"
                 aspectRatio="square"
                 width={150}
                 height={150}

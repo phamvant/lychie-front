@@ -1,11 +1,5 @@
 "use client";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -215,11 +209,14 @@ const CreateProductPage = ({ session }: any) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-2 lg:gap-8 px-36">
-          <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-            <Card x-chunk="dashboard-07-chunk-0" className="bg-white">
+        <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
+          <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
+            <Card
+              x-chunk="dashboard-07-chunk-0"
+              className="bg-white max-w-sm lg:max-w-xl"
+            >
               <CardHeader>
-                <CardTitle>Product Details</CardTitle>
+                <CardTitle>Chi tiết sản phầm</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-6">
@@ -229,7 +226,7 @@ const CreateProductPage = ({ session }: any) => {
                       name="productName"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>名前</FormLabel>
+                          <FormLabel>Tên sản phẩm</FormLabel>
                           <FormControl>
                             <Input
                               id="name"
@@ -248,7 +245,7 @@ const CreateProductPage = ({ session }: any) => {
                       name="productDescription"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>商品記述</FormLabel>
+                          <FormLabel>Miêu tả sản phẩm</FormLabel>
                           <FormControl>
                             <Input
                               id="description"
@@ -264,25 +261,25 @@ const CreateProductPage = ({ session }: any) => {
                 </div>
               </CardContent>
             </Card>
-            <Card x-chunk="dashboard-07-chunk-1" className="bg-white">
+            <Card
+              x-chunk="dashboard-07-chunk-1"
+              className="bg-white max-w-sm lg:max-w-xl"
+            >
               <CardHeader>
-                <CardTitle>数量</CardTitle>
-                <CardDescription>
-                  Lipsum dolor sit amet, consectetur adipiscing elit
-                </CardDescription>
+                <CardTitle>Thông tin sản phẩm</CardTitle>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>輸入値</TableHead>
-                      <TableHead>輸出値</TableHead>
-                      <TableHead className="w-[100px]">Size</TableHead>
+                      <TableHead className="p-0">Giá nhập</TableHead>
+                      <TableHead>Giá bán</TableHead>
+                      <TableHead className="w-[100px]">Kích cỡ</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     <TableRow>
-                      <TableCell>
+                      <TableCell className="pl-0">
                         <FormField
                           control={form.control}
                           name="productCostPrice"
@@ -324,6 +321,7 @@ const CreateProductPage = ({ session }: any) => {
                           type="multiple"
                           variant="outline"
                           onValueChange={onSizeChange}
+                          className="grid grid-cols-2"
                         >
                           <ToggleGroupItem value="XS">XS</ToggleGroupItem>
                           <ToggleGroupItem value="S">S</ToggleGroupItem>
@@ -337,14 +335,17 @@ const CreateProductPage = ({ session }: any) => {
                 </Table>
               </CardContent>
             </Card>
-            <Card x-chunk="dashboard-07-chunk-2" className="bg-white">
+            <Card
+              x-chunk="dashboard-07-chunk-2"
+              className="bg-white max-w-sm lg:max-w-xl"
+            >
               <CardHeader>
-                <CardTitle>Product Category</CardTitle>
+                <CardTitle>Phân loại sản phẩm</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-6 sm:grid-cols-3">
                   <div className="grid gap-3">
-                    <Label htmlFor="category">Category</Label>
+                    <Label htmlFor="category">Phân loại</Label>
                     <FormField
                       control={form.control}
                       name="productCategory"
@@ -370,7 +371,7 @@ const CreateProductPage = ({ session }: any) => {
                     />
                   </div>
                   <div className="grid gap-3">
-                    <Label htmlFor="subcategory">Subcategory (optional)</Label>
+                    <Label htmlFor="subcategory">Phân loại chi tiết</Label>
 
                     <FormField
                       control={form.control}
@@ -401,37 +402,6 @@ const CreateProductPage = ({ session }: any) => {
                 </div>
               </CardContent>
             </Card>
-            <Card x-chunk="dashboard-07-chunk-5" className="bg-white">
-              <CardHeader>
-                <CardTitle>Save Product</CardTitle>
-                <CardDescription>
-                  Lipsum dolor sit amet, consectetur adipiscing elit.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Button
-                  disabled={status === "fetching"}
-                  variant={
-                    (status === "success" ? true : false)
-                      ? "secondary"
-                      : "default"
-                  }
-                  size="sm"
-                  type="submit"
-                >
-                  {status === "fetching" ? (
-                    <>
-                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                      Fetching
-                    </>
-                  ) : status === "success" ? (
-                    <span className="text-green-500">Saved!</span>
-                  ) : (
-                    <>Save Product</>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
             {/* <Card x-chunk="dashboard-07-chunk-3" className="bg-white">
@@ -456,12 +426,12 @@ const CreateProductPage = ({ session }: any) => {
                 </div>
               </CardContent>
             </Card> */}
-            <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
+            <Card
+              className="overflow-hidden max-w-sm lg:max-w-xl"
+              x-chunk="dashboard-07-chunk-4"
+            >
               <CardHeader>
-                <CardTitle>Product Images</CardTitle>
-                <CardDescription>
-                  Lipsum dolor sit amet, consectetur adipiscing elit
-                </CardDescription>
+                <CardTitle>Ảnh sản phẩm</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid gap-2">
@@ -498,9 +468,40 @@ const CreateProductPage = ({ session }: any) => {
                       />
                       <Upload className="h-4 w-4 text-muted-foreground" />
                     </label>
-                    <span className="sr-only">Upload</span>
+                    <span className="sr-only">Tải lên</span>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+            <Card
+              x-chunk="dashboard-07-chunk-5"
+              className="bg-white max-w-sm lg:max-w-xl"
+            >
+              <CardHeader>
+                <CardTitle>Lưu sản phẩm</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  disabled={status === "fetching"}
+                  variant={
+                    (status === "success" ? true : false)
+                      ? "secondary"
+                      : "default"
+                  }
+                  size="sm"
+                  type="submit"
+                >
+                  {status === "fetching" ? (
+                    <>
+                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                      Loading
+                    </>
+                  ) : status === "success" ? (
+                    <span className="text-green-500">Đã lưu</span>
+                  ) : (
+                    <>Lưu sản phẩm</>
+                  )}
+                </Button>
               </CardContent>
             </Card>
           </div>

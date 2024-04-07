@@ -206,9 +206,12 @@ const ModifyProductPage = ({ session, product }: any) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <div className="grid gap-4 md:grid-cols-[1fr_250px] lg:grid-cols-2 lg:gap-8 px-36">
-          <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
-            <Card x-chunk="dashboard-07-chunk-0" className="bg-white">
+        <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
+          <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
+            <Card
+              x-chunk="dashboard-07-chunk-0"
+              className="bg-white max-w-sm lg:max-w-xl"
+            >
               <CardHeader>
                 <CardTitle>Product Details</CardTitle>
               </CardHeader>
@@ -255,7 +258,10 @@ const ModifyProductPage = ({ session, product }: any) => {
                 </div>
               </CardContent>
             </Card>
-            <Card x-chunk="dashboard-07-chunk-1" className="bg-white">
+            <Card
+              x-chunk="dashboard-07-chunk-1"
+              className="bg-white max-w-sm lg:max-w-xl"
+            >
               <CardHeader>
                 <CardTitle>Chi tiết</CardTitle>
               </CardHeader>
@@ -270,7 +276,7 @@ const ModifyProductPage = ({ session, product }: any) => {
                   </TableHeader>
                   <TableBody>
                     <TableRow>
-                      <TableCell className="pl-0">
+                      <TableCell>
                         <FormField
                           control={form.control}
                           name="productCostPrice"
@@ -311,6 +317,7 @@ const ModifyProductPage = ({ session, product }: any) => {
                         <ToggleGroup
                           type="multiple"
                           variant="outline"
+                          className="grid grid-cols-2"
                           onValueChange={onSizeChange}
                           defaultValue={product.productVariants.size}
                         >
@@ -326,7 +333,10 @@ const ModifyProductPage = ({ session, product }: any) => {
                 </Table>
               </CardContent>
             </Card>
-            <Card x-chunk="dashboard-07-chunk-2" className="bg-white">
+            <Card
+              x-chunk="dashboard-07-chunk-2"
+              className="bg-white max-w-sm lg:max-w-xl"
+            >
               <CardHeader>
                 <CardTitle>Phân loại sản phẩm</CardTitle>
               </CardHeader>
@@ -390,34 +400,6 @@ const ModifyProductPage = ({ session, product }: any) => {
                 </div>
               </CardContent>
             </Card>
-            <Card x-chunk="dashboard-07-chunk-5" className="bg-white">
-              <CardHeader>
-                <CardTitle>Lưu sản phẩm</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Button
-                  disabled={status === "fetching"}
-                  variant={
-                    (status === "success" ? true : false)
-                      ? "secondary"
-                      : "default"
-                  }
-                  size="sm"
-                  type="submit"
-                >
-                  {status === "fetching" ? (
-                    <>
-                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                      Loading
-                    </>
-                  ) : status === "success" ? (
-                    <span className="text-green-500">Saved!</span>
-                  ) : (
-                    <>Lưu sản phẩm</>
-                  )}
-                </Button>
-              </CardContent>
-            </Card>
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
             {/* <Card x-chunk="dashboard-07-chunk-3" className="bg-white">
@@ -442,7 +424,10 @@ const ModifyProductPage = ({ session, product }: any) => {
                 </div>
               </CardContent>
             </Card> */}
-            <Card className="overflow-hidden" x-chunk="dashboard-07-chunk-4">
+            <Card
+              className="overflow-hidden max-w-sm lg:max-w-xl"
+              x-chunk="dashboard-07-chunk-4"
+            >
               <CardHeader>
                 <CardTitle>Ảnh sản phẩm</CardTitle>
               </CardHeader>
@@ -485,6 +470,37 @@ const ModifyProductPage = ({ session, product }: any) => {
                     <span className="sr-only">Upload</span>
                   </div>
                 </div>
+              </CardContent>
+            </Card>
+            <Card
+              x-chunk="dashboard-07-chunk-5"
+              className="bg-white max-w-sm lg:max-w-xl"
+            >
+              <CardHeader>
+                <CardTitle>Lưu sản phẩm</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Button
+                  disabled={true}
+                  variant={
+                    (status === "success" ? true : false)
+                      ? "secondary"
+                      : "default"
+                  }
+                  size="sm"
+                  type="submit"
+                >
+                  {status === "fetching" ? (
+                    <>
+                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                      Loading
+                    </>
+                  ) : status === "success" ? (
+                    <span className="text-green-500">Saved!</span>
+                  ) : (
+                    <>Lưu sản phẩm</>
+                  )}
+                </Button>
               </CardContent>
             </Card>
           </div>
