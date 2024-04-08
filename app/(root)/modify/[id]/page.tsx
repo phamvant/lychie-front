@@ -1,41 +1,20 @@
 "use client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Upload } from "lucide-react";
-import Image from "next/image";
+import { Form } from "@/components/ui/form";
 
-import { Button } from "@/components/ui/button";
+import { SaveButton } from "@/components/product/button-save";
+import { ImageField } from "@/components/product/image-field";
+import { ProductCategory } from "@/components/product/product-category";
+import { ProductDetails } from "@/components/product/product-details";
+import { ProductVariant } from "@/components/product/product-variant";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import Compressor from "compressorjs";
 import _ from "lodash";
-import { useState } from "react";
+import { Session } from "next-auth";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { ProductDto } from "../../product/page";
 
 const productVariantSchema = {
   size: z.array(z.string()),
@@ -50,22 +29,35 @@ const productSchema = z.object({
   productPrice: z.string().min(1, "Price is required"),
   productCategory: z.string().trim().min(1, "Category is required"),
   productSubCategory: z.string().optional(), // Make subcategory optional if needed
-  // productVariants: z
-  //   .object(productVariantSchema)
-  //   .default({ size: ["M"], color: ["red"] }),
+  productMemo: z.string().optional(),
 });
 
-const ModifyProductPage = ({ session, product }: any) => {
+const initialProduct: ProductDto = {
+  productId: "",
+  productName: "",
+  productDescription: "",
+  productCostPrice: "",
+  productPrice: "",
+  productCategory: "",
+  productSubCategory: "",
+  productVariants: {},
+  productImages: [""],
+};
+
+const ModifyProductPage = ({
+  session,
+  productId,
+}: {
+  session: Session;
+  productId: string;
+}) => {
   const [status, setStatus] = useState<string>("idle");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState([]);
   const [size, setSize] = useState<string[]>([]);
-
-  const onSizeChange = (values: string[]) => {
-    setSize(values);
-  };
-
-  const productImages = product.productImages as string[];
+  const [color, setColor] = useState<string[]>([]);
+  const [product, setProduct] = useState<ProductDto>(initialProduct);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
@@ -78,6 +70,50 @@ const ModifyProductPage = ({ session, product }: any) => {
       productSubCategory: product.productSubCategory,
     },
   });
+
+  const onSizeChange = (values: string[]) => {
+    setSize(values);
+  };
+
+  const onColorChange = (values: string[]) => {
+    setColor(values);
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    const getProduct = async () => {
+      try {
+        const response = await fetch(
+          process.env.BACKEND_URL + `/product/${productId}`,
+          {
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${session?.backendTokens.accessToken}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const product = await response.json();
+        setProduct(product);
+        form.setValue("productName", product.productName);
+        form.setValue("productDescription", product.productDescription || ""); // Set empty string if optional
+        form.setValue("productCostPrice", product.productCostPrice || 0); // Set 0 if optional (adjust for number type)
+        form.setValue("productPrice", product.productPrice || 0); // Set 0 if optional (adjust for number type)
+        form.setValue("productCategory", product.productCategory);
+        form.setValue("productSubCategory", product.productSubCategory);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getProduct();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
     setStatus("fetching");
@@ -115,7 +151,11 @@ const ModifyProductPage = ({ session, product }: any) => {
         return prev;
       }, [] as string[]);
 
-      console.log({ ...values, productImages, productVariant: { size: size } });
+      console.log({
+        ...values,
+        productImages,
+        productVariant: { size: size, color: color },
+      });
 
       //----------------ProductRegiter----------------//
 
@@ -123,7 +163,11 @@ const ModifyProductPage = ({ session, product }: any) => {
         process.env.BACKEND_URL + "/product/create",
         {
           method: "POST",
-          body: JSON.stringify({ ...values, productImages }),
+          body: JSON.stringify({
+            ...values,
+            productImages,
+            productVariant: { size: size, color: color },
+          }),
           headers: {
             "Content-Type": "application/json",
             authorization: `Bearer ${session.backendTokens.accessToken}`,
@@ -208,270 +252,21 @@ const ModifyProductPage = ({ session, product }: any) => {
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
           <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
-            <Card
-              x-chunk="dashboard-07-chunk-0"
-              className="bg-white max-w-sm lg:max-w-xl"
-            >
-              <CardHeader>
-                <CardTitle>Product Details</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-6">
-                  <div className="grid gap-3">
-                    <FormField
-                      control={form.control}
-                      name="productName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Tên</FormLabel>
-                          <FormControl>
-                            <Input
-                              id="name"
-                              type="text"
-                              className="w-full"
-                              {...field}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid gap-3">
-                    <FormField
-                      control={form.control}
-                      name="productDescription"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Miêu tả</FormLabel>
-                          <FormControl>
-                            <Input
-                              id="description"
-                              type="text"
-                              className="w-full"
-                              {...field}
-                            />
-                          </FormControl>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card
-              x-chunk="dashboard-07-chunk-1"
-              className="bg-white max-w-sm lg:max-w-xl"
-            >
-              <CardHeader>
-                <CardTitle>Chi tiết</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="p-0">Giá nhập</TableHead>
-                      <TableHead>Giá bán</TableHead>
-                      <TableHead className="w-[100px]">Kích cỡ</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>
-                        <FormField
-                          control={form.control}
-                          name="productCostPrice"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  type="text"
-                                  className="w-full"
-                                  {...field}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <Label htmlFor="price-1" className="sr-only">
-                          Price
-                        </Label>
-                        <FormField
-                          control={form.control}
-                          name="productPrice"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <Input
-                                  type="number"
-                                  className="w-full"
-                                  {...field}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <ToggleGroup
-                          type="multiple"
-                          variant="outline"
-                          className="grid grid-cols-2"
-                          onValueChange={onSizeChange}
-                          defaultValue={product.productVariants.size}
-                        >
-                          <ToggleGroupItem value="XS">XS</ToggleGroupItem>
-                          <ToggleGroupItem value="S">S</ToggleGroupItem>
-                          <ToggleGroupItem value="M">M</ToggleGroupItem>
-                          <ToggleGroupItem value="L">L</ToggleGroupItem>
-                          <ToggleGroupItem value="XL">XL</ToggleGroupItem>
-                        </ToggleGroup>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-            <Card
-              x-chunk="dashboard-07-chunk-2"
-              className="bg-white max-w-sm lg:max-w-xl"
-            >
-              <CardHeader>
-                <CardTitle>Phân loại sản phẩm</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-6 sm:grid-cols-3">
-                  <div className="grid gap-3">
-                    <Label htmlFor="category">Phân loại</Label>
-                    <FormField
-                      control={form.control}
-                      name="productCategory"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select Category" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="Clothes">Clothes</SelectItem>
-                              <SelectItem value="Dress">Dress</SelectItem>
-                              <SelectItem value="Bag">Bag</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="grid gap-3">
-                    <Label htmlFor="subcategory">Phân loại chi tiết</Label>
-
-                    <FormField
-                      control={form.control}
-                      name="productSubCategory"
-                      render={({ field }) => (
-                        <FormItem>
-                          <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select Category" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="T-shirts">T-Shirts</SelectItem>
-                              <SelectItem value="Hoodies">Hoodies</SelectItem>
-                              <SelectItem value="Sweatshirts">
-                                Sweatshirts
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <ProductDetails form={form} />
+            <ProductVariant
+              form={form}
+              onSizeChange={onSizeChange}
+              size={product.productVariants.size}
+              onColorChange={onColorChange}
+              color={product.productVariants.color}
+            />
+            <ProductCategory form={form} />
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-            {/* <Card x-chunk="dashboard-07-chunk-3" className="bg-white">
-              <CardHeader>
-                <CardTitle>Product Status</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-6">
-                  <div className="grid gap-3">
-                    <Label htmlFor="status">Status</Label>
-                    <Select>
-                      <SelectTrigger id="status" aria-label="Select status">
-                        <SelectValue placeholder="Select status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="draft">Draft</SelectItem>
-                        <SelectItem value="published">Active</SelectItem>
-                        <SelectItem value="archived">Archived</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </CardContent>
-            </Card> */}
-            <Card
-              className="overflow-hidden max-w-sm lg:max-w-xl"
-              x-chunk="dashboard-07-chunk-4"
-            >
-              <CardHeader>
-                <CardTitle>Ảnh sản phẩm</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-2">
-                  <Image
-                    alt="Product image"
-                    className="aspect-square w-full rounded-md object-cover"
-                    height="300"
-                    src={product.productImages[0] || "/placeholder.svg"}
-                    width="300"
-                  />
-                  <div className="grid grid-cols-3 gap-2">
-                    {productImages
-                      .filter((value, index) => index !== 0)
-                      .map((url, index) => (
-                        <Image
-                          key={index}
-                          alt="Product image"
-                          className="aspect-square w-full rounded-md object-cover"
-                          height="84"
-                          src={url || "/placeholder.svg"}
-                          width="84"
-                        />
-                      ))}
-
-                    <label
-                      htmlFor="fileInput"
-                      className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed"
-                    >
-                      <input
-                        hidden
-                        type="file"
-                        id="fileInput"
-                        multiple
-                        onChange={handleChange}
-                      />
-                      <Upload className="h-4 w-4 text-muted-foreground" />
-                    </label>
-                    <span className="sr-only">Upload</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <ImageField
+              images={product.productImages}
+              handleChange={handleChange}
+            />
             <Card
               x-chunk="dashboard-07-chunk-5"
               className="bg-white max-w-sm lg:max-w-xl"
@@ -480,27 +275,7 @@ const ModifyProductPage = ({ session, product }: any) => {
                 <CardTitle>Lưu sản phẩm</CardTitle>
               </CardHeader>
               <CardContent>
-                <Button
-                  disabled={true}
-                  variant={
-                    (status === "success" ? true : false)
-                      ? "secondary"
-                      : "default"
-                  }
-                  size="sm"
-                  type="submit"
-                >
-                  {status === "fetching" ? (
-                    <>
-                      <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-                      Loading
-                    </>
-                  ) : status === "success" ? (
-                    <span className="text-green-500">Saved!</span>
-                  ) : (
-                    <>Lưu sản phẩm</>
-                  )}
-                </Button>
+                <SaveButton status={status} />
               </CardContent>
             </Card>
           </div>

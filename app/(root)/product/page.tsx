@@ -1,3 +1,5 @@
+"use client";
+
 import { AlbumArtwork } from "@/components/product/image";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,8 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Metadata } from "next";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 export interface Album {
   name: string;
   artist: string;
@@ -27,14 +29,38 @@ export interface ProductDto {
   productImages: string[];
 }
 
-export const metadata: Metadata = {
-  title: "Product",
-  description: "Example dashboard app built using the components.",
-};
+const ProductPage = ({ session }: any) => {
+  const [products, setProducts] = useState<ProductDto[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-const ProductPage = ({ products }: any) => {
-  // console.log(products);
-  const kariProducts = products as ProductDto[];
+  useEffect(() => {
+    const getProductData = async () => {
+      setIsLoading(true);
+
+      try {
+        const ret = await fetch(process.env.BACKEND_URL + "/product", {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${session.backendTokens.accessToken}`,
+          },
+        });
+        const products = await ret.json();
+        console.log(products);
+        setProducts(products);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getProductData();
+  }, []);
+
+  if (isLoading) {
+    return <div>Loading</div>;
+  }
+
   return (
     <div className="lg:px-20 flex flex-1">
       <Card className="w-full border-none">
@@ -46,7 +72,7 @@ const ProductPage = ({ products }: any) => {
         </CardHeader>
         <CardContent className="pr-0 lg:pr-6">
           <div className="grid lg:grid-cols-4 grid-cols-2 lg:gap-x-12 lg:gap-y-20">
-            {kariProducts.map((product) => (
+            {products.map((product) => (
               <AlbumArtwork
                 key={product.productName}
                 product={product}
@@ -54,6 +80,7 @@ const ProductPage = ({ products }: any) => {
                 aspectRatio="square"
                 width={150}
                 height={150}
+                isLoading={isLoading}
               />
             ))}
           </div>

@@ -10,6 +10,7 @@ interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   aspectRatio?: "portrait" | "square";
   width?: number;
   height?: number;
+  isLoading: boolean;
 }
 
 export function AlbumArtwork({
@@ -17,6 +18,7 @@ export function AlbumArtwork({
   aspectRatio = "portrait",
   width,
   height,
+  isLoading,
   className,
   ...props
 }: AlbumArtworkProps) {
@@ -26,7 +28,7 @@ export function AlbumArtwork({
       {...props}
     >
       <Image
-        src={product.productImages[0]}
+        src={isLoading ? "/placeholder.svg" : product.productImages[0]}
         alt={product.productName}
         width={width}
         height={height}

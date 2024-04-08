@@ -1,14 +1,20 @@
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
+"use client";
+
+import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import React from "react";
+import Dashboard from "./page";
 
-type Props = {
-  children: React.ReactNode;
-};
+// export const metadata: Metadata = {
+//   title: "Dashboard",
+//   description: "Example dashboard app built using the components.",
+// };
 
-const DashboardLayout = async (props: Props) => {
-  const session = await getServerSession(authOptions);
+const DashboardLayout = () => {
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return <div>Loading...</div>;
+  }
 
   if (!session || !session.user) {
     return redirect("/");
@@ -16,7 +22,7 @@ const DashboardLayout = async (props: Props) => {
 
   return (
     <div>
-      {React.cloneElement(props.children as React.ReactElement, { session })}
+      <Dashboard />
     </div>
   );
 };

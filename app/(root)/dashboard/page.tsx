@@ -1,6 +1,6 @@
-import { Metadata } from "next";
-import Image from "next/image";
-
+import CalendarDateRangePicker from "@/components/dashboard/date-range-picker";
+import Overview from "@/components/dashboard/overview";
+import RecentSales from "@/components/dashboard/recent-sales";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,16 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import CalendarDateRangePicker from "@/components/dashboard/date-range-picker";
-import Overview from "@/components/dashboard/overview";
-import RecentSales from "@/components/dashboard/recent-sales";
 
-export const metadata: Metadata = {
-  title: "Dashboard",
-  description: "Example dashboard app built using the components.",
-};
-
-const Dashboard = async () => {
+const Dashboard = () => {
   return (
     <>
       <div className="flex-col md:flex">
