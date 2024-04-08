@@ -15,7 +15,9 @@ export const SaveButton = ({ status }: { status: string }) => {
         <Button
           disabled={status === "fetching"}
           variant={
-            (status === "success" ? true : false) ? "secondary" : "default"
+            (status === "success" || status === "error" ? true : false)
+              ? "secondary"
+              : "default"
           }
           size="sm"
           type="submit"
@@ -30,6 +32,11 @@ export const SaveButton = ({ status }: { status: string }) => {
           )}
           {status === "success" ? (
             <span className="text-green-500">Đã lưu</span>
+          ) : (
+            ""
+          )}
+          {status === "error" ? (
+            <span className="text-red-500">Lỗi lưu sản phẩm!</span>
           ) : (
             ""
           )}

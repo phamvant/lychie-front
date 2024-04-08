@@ -27,6 +27,7 @@ export interface ProductDto {
   productSubCategory: string;
   productVariants: any;
   productImages: string[];
+  productMemo: string;
 }
 
 const ProductPage = ({ session }: any) => {

@@ -19,12 +19,13 @@ export const ProductDetails = ({ form }: { form: any }) => {
               name="productName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tên</FormLabel>
+                  <FormLabel>Tên sản phẩm</FormLabel>
                   <FormControl>
                     <Input
                       id="name"
                       type="text"
                       className="w-full"
+                      placeholder="Tên sản phẩm"
                       {...field}
                     />
                   </FormControl>
@@ -44,6 +45,7 @@ export const ProductDetails = ({ form }: { form: any }) => {
                       id="description"
                       type="text"
                       className="w-full"
+                      placeholder="Miêu tả"
                       {...field}
                     />
                   </FormControl>
@@ -63,6 +65,7 @@ export const ProductDetails = ({ form }: { form: any }) => {
                       id="productMemo"
                       type="text"
                       className="w-full"
+                      placeholder="Ghi chú"
                       {...field}
                     />
                   </FormControl>

@@ -15,48 +15,43 @@ import { z } from "zod";
 
 const productVariantSchema = {
   size: z.array(z.string()),
-  color: z.array(z.string()).optional(),
+  color: z.array(z.string()),
   material: z.string().optional(),
 };
 
-const productSchema = z.object({
+export const productSchema = z.object({
   productName: z.string().trim().min(1, "Name is required").max(255),
   productDescription: z.string().trim().min(1, "Description is required"),
   productCostPrice: z.string().min(1, "Price is required"),
   productPrice: z.string().min(1, "Price is required"),
   productCategory: z.string().trim().min(1, "Category is required"),
-  productSubCategory: z.string().optional(), // Make subcategory optional if needed
-  // productVariants: z
-  //   .object(productVariantSchema)
-  //   .default({ size: ["M"], color: ["red"] }),
+  productSubCategory: z.string().optional(),
+  productMemo: z.string().optional(),
+  productVariants: z.object(productVariantSchema),
 });
 
 const CreateProductPage = ({ session }: any) => {
   const [status, setStatus] = useState<string>("idle");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState([]);
-  const [size, setSize] = useState<string[]>([]);
-
-  const onSizeChange = (values: string[]) => {
-    setSize(values);
-  };
 
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      productName: "Vay ngan cun con",
-      productDescription: "Vay ngan cun con",
-      productCostPrice: "20000",
-      productPrice: "30000",
-      productCategory: "Clothes",
-      productSubCategory: "Hoodies",
+      productName: "",
+      productDescription: "",
+      productCostPrice: "",
+      productPrice: "",
+      productCategory: "",
+      productSubCategory: "",
+      productMemo: "",
+      // productVariants: { size: [] },
     },
   });
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
     setStatus("fetching");
-    console.log(process.env.BACKEND_URL);
-
+    console.log(values);
     try {
       //----------------GET_URL----------------//
       const uploadUrlResponse = await fetch(
@@ -93,8 +88,9 @@ const CreateProductPage = ({ session }: any) => {
       const queryObj = {
         ...values,
         productImages,
-        productVariants: { size: size },
       };
+
+      console.log(queryObj);
 
       //----------------ProductRegiter----------------//
 
@@ -117,7 +113,8 @@ const CreateProductPage = ({ session }: any) => {
           "Error registering product:",
           await registerResponse.text()
         );
-        return;
+
+        throw new Error();
       }
 
       //----------------Upload_Image----------------//
@@ -143,6 +140,7 @@ const CreateProductPage = ({ session }: any) => {
 
       setStatus("success");
     } catch (error) {
+      setStatus("error");
       console.error("Error during concurrent requests:", error);
     }
   }
@@ -188,13 +186,7 @@ const CreateProductPage = ({ session }: any) => {
         <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
           <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
             <ProductDetails form={form} />
-            <ProductVariant
-              form={form}
-              onSizeChange={onSizeChange}
-              size={size}
-              onColorChange={undefined}
-              color={[]}
-            />
+            <ProductVariant form={form} />
             <ProductCategory form={form} />
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">

@@ -14,23 +14,8 @@ import { Session } from "next-auth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { productSchema } from "../../create/page";
 import { ProductDto } from "../../product/page";
-
-const productVariantSchema = {
-  size: z.array(z.string()),
-  color: z.array(z.string()).optional(),
-  material: z.string().optional(),
-};
-
-const productSchema = z.object({
-  productName: z.string().trim().min(1, "Name is required").max(255),
-  productDescription: z.string().trim().min(1, "Description is required"),
-  productCostPrice: z.string().min(1, "Price is required"),
-  productPrice: z.string().min(1, "Price is required"),
-  productCategory: z.string().trim().min(1, "Category is required"),
-  productSubCategory: z.string().optional(), // Make subcategory optional if needed
-  productMemo: z.string().optional(),
-});
 
 const initialProduct: ProductDto = {
   productId: "",
@@ -42,6 +27,7 @@ const initialProduct: ProductDto = {
   productSubCategory: "",
   productVariants: {},
   productImages: [""],
+  productMemo: "",
 };
 
 const ModifyProductPage = ({
@@ -54,8 +40,6 @@ const ModifyProductPage = ({
   const [status, setStatus] = useState<string>("idle");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState([]);
-  const [size, setSize] = useState<string[]>([]);
-  const [color, setColor] = useState<string[]>([]);
   const [product, setProduct] = useState<ProductDto>(initialProduct);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -68,16 +52,9 @@ const ModifyProductPage = ({
       productPrice: product.productPrice,
       productCategory: product.productCategory,
       productSubCategory: product.productSubCategory,
+      productMemo: product.productMemo,
     },
   });
-
-  const onSizeChange = (values: string[]) => {
-    setSize(values);
-  };
-
-  const onColorChange = (values: string[]) => {
-    setColor(values);
-  };
 
   useEffect(() => {
     setIsLoading(true);
@@ -154,7 +131,6 @@ const ModifyProductPage = ({
       console.log({
         ...values,
         productImages,
-        productVariant: { size: size, color: color },
       });
 
       //----------------ProductRegiter----------------//
@@ -166,7 +142,6 @@ const ModifyProductPage = ({
           body: JSON.stringify({
             ...values,
             productImages,
-            productVariant: { size: size, color: color },
           }),
           headers: {
             "Content-Type": "application/json",
@@ -253,13 +228,7 @@ const ModifyProductPage = ({
         <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
           <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
             <ProductDetails form={form} />
-            <ProductVariant
-              form={form}
-              onSizeChange={onSizeChange}
-              size={product.productVariants.size}
-              onColorChange={onColorChange}
-              color={product.productVariants.color}
-            />
+            <ProductVariant form={form} />
             <ProductCategory form={form} />
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">

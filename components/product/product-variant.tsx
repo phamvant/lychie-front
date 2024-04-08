@@ -1,22 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
-export const ProductVariant = ({
-  form,
-  onSizeChange,
-  size,
-  onColorChange,
-  color,
-}: {
-  form: any;
-  onSizeChange: any;
-  size: string[];
-  onColorChange: any;
-  color: string[];
-}) => {
+export const ProductVariant = ({ form }: { form: any }) => {
   return (
     <Card
       x-chunk="dashboard-07-chunk-1"
@@ -38,6 +25,7 @@ export const ProductVariant = ({
                     <Input
                       id="name"
                       type="text"
+                      placeholder="Giá nhập"
                       className="w-full"
                       {...field}
                     />
@@ -57,6 +45,7 @@ export const ProductVariant = ({
                     <Input
                       id="productPrice"
                       type="text"
+                      placeholder="Giá bán"
                       className="w-full"
                       {...field}
                     />
@@ -66,36 +55,52 @@ export const ProductVariant = ({
             />
           </div>
           <div className="flex flex-col gap-3">
-            <Label>Size</Label>
-            <ToggleGroup
-              type="multiple"
-              variant="outline"
-              className="grid grid-cols-12"
-              onValueChange={onSizeChange}
-              defaultValue={size}
-            >
-              <ToggleGroupItem value="XS">XS</ToggleGroupItem>
-              <ToggleGroupItem value="S">S</ToggleGroupItem>
-              <ToggleGroupItem value="M">M</ToggleGroupItem>
-              <ToggleGroupItem value="L">L</ToggleGroupItem>
-              <ToggleGroupItem value="XL">XL</ToggleGroupItem>
-            </ToggleGroup>
+            <FormField
+              control={form.control}
+              name="productVariants.size"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Size</FormLabel>
+                  <ToggleGroup
+                    type="multiple"
+                    variant="outline"
+                    className="grid grid-cols-12"
+                    {...field}
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <ToggleGroupItem value="XS">XS</ToggleGroupItem>
+                    <ToggleGroupItem value="S">S</ToggleGroupItem>
+                    <ToggleGroupItem value="M">M</ToggleGroupItem>
+                    <ToggleGroupItem value="L">L</ToggleGroupItem>
+                    <ToggleGroupItem value="XL">XL</ToggleGroupItem>
+                  </ToggleGroup>
+                </FormItem>
+              )}
+            />
           </div>
           <div className="flex flex-col gap-3">
-            <Label>Màu sắc</Label>
-            <ToggleGroup
-              type="multiple"
-              variant="outline"
-              className="grid grid-cols-8"
-              onValueChange={onColorChange}
-              defaultValue={color}
-            >
-              <ToggleGroupItem value="Blue">Xanh</ToggleGroupItem>
-              <ToggleGroupItem value="Red">Đỏ</ToggleGroupItem>
-              <ToggleGroupItem value="Purple">Tím</ToggleGroupItem>
-              <ToggleGroupItem value="Yellow">Vàng</ToggleGroupItem>
-              <ToggleGroupItem value="Black">Đen</ToggleGroupItem>
-            </ToggleGroup>
+            <FormField
+              control={form.control}
+              name="productVariants.color"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Màu sắc</FormLabel>
+                  <ToggleGroup
+                    type="multiple"
+                    variant="outline"
+                    className="grid grid-cols-8"
+                    {...field}
+                  >
+                    <ToggleGroupItem value="Blue">Xanh</ToggleGroupItem>
+                    <ToggleGroupItem value="Red">Đỏ</ToggleGroupItem>
+                    <ToggleGroupItem value="Purple">Tím</ToggleGroupItem>
+                    <ToggleGroupItem value="Yellow">Vàng</ToggleGroupItem>
+                    <ToggleGroupItem value="Black">Đen</ToggleGroupItem>
+                  </ToggleGroup>
+                </FormItem>
+              )}
+            />
           </div>
         </CardContent>
       </div>

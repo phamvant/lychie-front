@@ -1,5 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { FormControl, FormField, FormItem } from "../ui/form";
+import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
 import { Label } from "../ui/label";
 import {
   Select,
@@ -21,12 +21,12 @@ export const ProductCategory = ({ form }: { form: any }) => {
       <CardContent>
         <div className="grid gap-6 sm:grid-cols-3">
           <div className="grid gap-3">
-            <Label htmlFor="category">Phân loại</Label>
             <FormField
               control={form.control}
               name="productCategory"
               render={({ field }) => (
                 <FormItem>
+                  <FormLabel>Phân loại</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
