@@ -10,12 +10,27 @@ import { ProductVariant } from "@/components/product/product-variant";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Compressor from "compressorjs";
 import _ from "lodash";
-import { Session } from "next-auth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { productSchema } from "../../create/page";
 import { ProductDto } from "../../product/page";
+
+const productVariantSchema = {
+  size: z.array(z.string()),
+  color: z.array(z.string()),
+  material: z.string().optional(),
+};
+
+const productSchema = z.object({
+  productName: z.string().trim().min(1, "Name is required").max(255),
+  productDescription: z.string().trim().min(1, "Description is required"),
+  productCostPrice: z.string().min(1, "Price is required"),
+  productPrice: z.string().min(1, "Price is required"),
+  productCategory: z.string().trim().min(1, "Category is required"),
+  productSubCategory: z.string().optional(),
+  productMemo: z.string().optional(),
+  productVariants: z.object(productVariantSchema),
+});
 
 const initialProduct: ProductDto = {
   productId: "",
@@ -30,13 +45,7 @@ const initialProduct: ProductDto = {
   productMemo: "",
 };
 
-const ModifyProductPage = ({
-  session,
-  productId,
-}: {
-  session: Session;
-  productId: string;
-}) => {
+const ModifyProductPage = ({ session, productId }: any) => {
   const [status, setStatus] = useState<string>("idle");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState([]);

@@ -19,7 +19,7 @@ const productVariantSchema = {
   material: z.string().optional(),
 };
 
-export const productSchema = z.object({
+const productSchema = z.object({
   productName: z.string().trim().min(1, "Name is required").max(255),
   productDescription: z.string().trim().min(1, "Description is required"),
   productCostPrice: z.string().min(1, "Price is required"),
