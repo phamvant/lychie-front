@@ -90,6 +90,8 @@ export const ProductVariant = ({ form }: { form: any }) => {
                     type="multiple"
                     variant="outline"
                     className="grid grid-cols-8"
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
                     {...field}
                   >
                     <ToggleGroupItem value="Blue">Xanh</ToggleGroupItem>
