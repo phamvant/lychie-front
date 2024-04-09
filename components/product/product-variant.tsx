@@ -99,7 +99,11 @@ export const ProductVariant = ({ form }: { form: any }) => {
               )}
             />
           </div>
-          <FancyMultiSelect form={form} />
+          {form.watch(["productVariants.color"]) !== undefined ? (
+            <FancyMultiSelect form={form} />
+          ) : (
+            <></>
+          )}
         </CardContent>
       </div>
     </Card>

@@ -29,8 +29,7 @@ const ProductPage = ({ session }: any) => {
           },
         });
         const products = await ret.json();
-        console.log(products);
-        setProducts(products);
+        // setProducts(products);
       } catch (error) {
         console.log(error);
       } finally {

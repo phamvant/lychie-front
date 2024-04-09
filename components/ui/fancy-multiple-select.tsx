@@ -54,7 +54,7 @@ const COLOR = [
   },
 ] satisfies Color[];
 
-export function FancyMultiSelect({ form }: { form: any }) {
+export const FancyMultiSelect = ({ form }: { form: any }) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<Color[]>([]);
@@ -86,7 +86,12 @@ export function FancyMultiSelect({ form }: { form: any }) {
     []
   );
 
-  const selectables = COLOR.filter((color) => !selected.includes(color));
+  const selectables = COLOR.filter((color) => {
+    if (selected) {
+      return !selected.includes(color);
+    }
+    return [COLOR[0]];
+  });
 
   return (
     <Command
@@ -97,28 +102,34 @@ export function FancyMultiSelect({ form }: { form: any }) {
         <Label>Màu sắc</Label>
         <div className="group border border-input px-3 py-2 text-sm ring-offset-background rounded-md focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
           <div className="flex gap-1 flex-wrap">
-            {selected.map((framework) => {
-              return (
-                <Badge key={framework.value} variant="secondary">
-                  {framework.label}
-                  <button
-                    className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        handleUnselect(framework);
-                      }
-                    }}
-                    onMouseDown={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                    onClick={() => handleUnselect(framework)}
-                  >
-                    <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                  </button>
-                </Badge>
-              );
-            })}
+            {form.watch(["productVariants.color"]) !== undefined ? (
+              COLOR.filter((value) =>
+                form.watch(["productVariants.color"]).includes(value.value)
+              ).map((framework) => {
+                return (
+                  <Badge key={framework.value} variant="secondary">
+                    {framework.label}
+                    <button
+                      className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          handleUnselect(framework);
+                        }
+                      }}
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onClick={() => handleUnselect(framework)}
+                    >
+                      <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                    </button>
+                  </Badge>
+                );
+              })
+            ) : (
+              <></>
+            )}
 
             <CommandPrimitive.Input
               ref={inputRef}
@@ -126,7 +137,7 @@ export function FancyMultiSelect({ form }: { form: any }) {
               onValueChange={setInputValue}
               onBlur={() => setOpen(false)}
               onFocus={() => setOpen(true)}
-              placeholder="Chọn mà sắc..."
+              placeholder="Chọn màu sắc..."
               className="ml-2 bg-transparent outline-none placeholder:text-muted-foreground flex-1"
             />
           </div>
@@ -155,7 +166,6 @@ export function FancyMultiSelect({ form }: { form: any }) {
                                 framework.value,
                               ]);
                               setSelected((prev) => {
-                                console.log(prev);
                                 return [...prev, framework];
                               });
                             }}
@@ -176,4 +186,4 @@ export function FancyMultiSelect({ form }: { form: any }) {
       </div>
     </Command>
   );
-}
+};

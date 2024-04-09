@@ -106,8 +106,6 @@ const CreateProductPage = ({ session }: any) => {
         productImages,
       };
 
-      console.log(queryObj);
-
       //----------------ProductRegiter----------------//
 
       const registerResponse = await fetch(

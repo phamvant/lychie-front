@@ -64,6 +64,7 @@ export const ProductPrice = ({ form }: { form: any }) => {
                         placeholder="Giá nhập"
                         className="w-full"
                         onChange={field.onChange}
+                        defaultValue={field.value}
                       />
                     </FormControl>
                     <FormMessage />
@@ -88,6 +89,7 @@ export const ProductPrice = ({ form }: { form: any }) => {
                           field.onChange(e.target.value);
                           onChangePrice();
                         }}
+                        defaultValue={field.value}
                       />
                     </FormControl>
                     <FormMessage />
@@ -143,6 +145,7 @@ export const ProductPrice = ({ form }: { form: any }) => {
                           field.onChange(e.target.value);
                           onChangePrice();
                         }}
+                        defaultValue={field.value}
                       />
                     </FormControl>
                     <FormMessage />

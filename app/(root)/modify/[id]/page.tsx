@@ -74,9 +74,13 @@ const ModifyProductPage = ({ session, productId }: any) => {
       productDescription: product.productDescription,
       productCostPrice: product.productCostPrice,
       productPrice: product.productPrice,
+      productFinalPrice: product.productFinalPrice,
+      productDiscountType: product.productDiscountType,
+      productDiscountAmount: product.productDiscountAmount,
       productCategory: product.productCategory,
       productSubCategory: product.productSubCategory,
       productMemo: product.productMemo,
+      productVariants: product.productVariants,
     },
   });
 
@@ -100,8 +104,12 @@ const ModifyProductPage = ({ session, productId }: any) => {
         form.setValue("productDescription", product.productDescription || ""); // Set empty string if optional
         form.setValue("productCostPrice", product.productCostPrice || 0); // Set 0 if optional (adjust for number type)
         form.setValue("productPrice", product.productPrice || 0); // Set 0 if optional (adjust for number type)
+        form.setValue("productFinalPrice", product.productFinalPrice);
+        form.setValue("productDiscountType", product.productDiscountType);
+        form.setValue("productDiscountAmount", product.productDiscountAmount);
         form.setValue("productCategory", product.productCategory);
         form.setValue("productSubCategory", product.productSubCategory);
+        form.setValue("productVariants", product.productVariants);
       } catch (error) {
         console.log(error);
       } finally {
@@ -118,7 +126,6 @@ const ModifyProductPage = ({ session, productId }: any) => {
 
   async function onSubmit(values: z.infer<typeof productSchema>) {
     setStatus("fetching");
-    console.log(process.env.BACKEND_URL);
 
     try {
       //----------------GET_URL----------------//
@@ -151,11 +158,6 @@ const ModifyProductPage = ({ session, productId }: any) => {
         prev.push(current.split("?")[0]);
         return prev;
       }, [] as string[]);
-
-      console.log({
-        ...values,
-        productImages,
-      });
 
       //----------------ProductRegiter----------------//
 

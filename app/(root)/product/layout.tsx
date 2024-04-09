@@ -20,8 +20,6 @@ const ProductLayout = () => {
     return redirect("/");
   }
 
-  console.log(session);
-
   return (
     <div className="flex content-center justify-around pt-8 ">
       <ProductPage session={session} />
