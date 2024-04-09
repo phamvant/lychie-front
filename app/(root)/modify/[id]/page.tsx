@@ -4,8 +4,8 @@ import { Form } from "@/components/ui/form";
 
 import { SaveButton } from "@/components/product/button-save";
 import { ImageField } from "@/components/product/image-field";
-import { ProductCategory } from "@/components/product/product-category";
 import { ProductDetails } from "@/components/product/product-details";
+import { ProductPrice } from "@/components/product/product-price";
 import { ProductVariant } from "@/components/product/product-variant";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Compressor from "compressorjs";
@@ -13,7 +13,7 @@ import _ from "lodash";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ProductDto } from "../../product/page";
+import { ProductDto } from "../../product/product-dto";
 
 const productVariantSchema = {
   size: z.array(z.string()),
@@ -21,23 +21,38 @@ const productVariantSchema = {
   material: z.string().optional(),
 };
 
-const productSchema = z.object({
-  productName: z.string().trim().min(1, "Name is required").max(255),
-  productDescription: z.string().trim().min(1, "Description is required"),
-  productCostPrice: z.string().min(1, "Price is required"),
-  productPrice: z.string().min(1, "Price is required"),
-  productCategory: z.string().trim().min(1, "Category is required"),
-  productSubCategory: z.string().optional(),
-  productMemo: z.string().optional(),
-  productVariants: z.object(productVariantSchema),
-});
+const productSchema = z
+  .object({
+    productName: z.string().trim().min(1, "Name is required").max(255),
+    productDescription: z.string().trim().min(1, "Description is required"),
+    productCostPrice: z.coerce.number().min(1, "Price is required"),
+    productPrice: z.coerce.number().min(1, "Price is required"),
+    productFinalPrice: z.number().min(1, "Calculate error"),
+    productDiscountType: z.string(),
+    productDiscountAmount: z.number().optional(),
+    productCategory: z.string().trim().min(1, "Category is required"),
+    productSubCategory: z.string().optional(),
+    productMemo: z.string().optional(),
+    productVariants: z.object(productVariantSchema),
+  })
+  .refine((schema) => {
+    return !(
+      (schema.productDiscountType === "none" &&
+        schema.productDiscountAmount !== 0) ||
+      (schema.productDiscountType !== "none" &&
+        schema.productDiscountAmount === 0)
+    );
+  }, "Discount Error");
 
 const initialProduct: ProductDto = {
   productId: "",
   productName: "",
   productDescription: "",
-  productCostPrice: "",
-  productPrice: "",
+  productCostPrice: 0,
+  productPrice: 0,
+  productFinalPrice: 0,
+  productDiscountType: "",
+  productDiscountAmount: 0,
   productCategory: "",
   productSubCategory: "",
   productVariants: {},
@@ -237,8 +252,8 @@ const ModifyProductPage = ({ session, productId }: any) => {
         <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
           <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
             <ProductDetails form={form} />
+            <ProductPrice form={form} />
             <ProductVariant form={form} />
-            <ProductCategory form={form} />
           </div>
           <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
             <ImageField

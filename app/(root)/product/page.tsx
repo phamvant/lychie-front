@@ -1,6 +1,6 @@
 "use client";
 
-import { AlbumArtwork } from "@/components/product/image";
+import { ProductImage } from "@/components/product/product-image";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,24 +11,7 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-export interface Album {
-  name: string;
-  artist: string;
-  cover: string;
-}
-
-export interface ProductDto {
-  productId: string;
-  productName: string;
-  productDescription: string;
-  productCostPrice: string;
-  productPrice: string;
-  productCategory: string;
-  productSubCategory: string;
-  productVariants: any;
-  productImages: string[];
-  productMemo: string;
-}
+import { ProductDto } from "./product-dto";
 
 const ProductPage = ({ session }: any) => {
   const [products, setProducts] = useState<ProductDto[]>([]);
@@ -74,7 +57,7 @@ const ProductPage = ({ session }: any) => {
         <CardContent className="pr-0 lg:pr-6">
           <div className="grid lg:grid-cols-4 grid-cols-2 lg:gap-x-12 lg:gap-y-20">
             {products.map((product) => (
-              <AlbumArtwork
+              <ProductImage
                 key={product.productName}
                 product={product}
                 className="lg:w-[240px] w-[150px]"

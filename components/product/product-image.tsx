@@ -2,10 +2,10 @@ import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 
-import { ProductDto } from "@/app/(root)/product/page";
+import { ProductDto } from "@/app/(root)/product/product-dto";
 import Link from "next/link";
 
-interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   product: ProductDto;
   aspectRatio?: "portrait" | "square";
   width?: number;
@@ -13,7 +13,7 @@ interface AlbumArtworkProps extends React.HTMLAttributes<HTMLDivElement> {
   isLoading: boolean;
 }
 
-export function AlbumArtwork({
+export function ProductImage({
   product,
   aspectRatio = "portrait",
   width,
@@ -21,7 +21,7 @@ export function AlbumArtwork({
   isLoading,
   className,
   ...props
-}: AlbumArtworkProps) {
+}: Props) {
   return (
     <div
       className={cn("space-y-3 flex flex-col rounded-xl p-2", className)}
