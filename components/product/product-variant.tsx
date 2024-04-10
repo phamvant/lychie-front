@@ -1,6 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { FancyMultiSelect } from "../ui/fancy-multiple-select";
-import { FormControl, FormField, FormItem, FormLabel } from "../ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
+import MultipleSelector from "../ui/mutiple-select";
 import {
   Select,
   SelectContent,
@@ -35,7 +41,7 @@ export const ProductVariant = ({ form }: { form: any }) => {
                     >
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Category" />
+                          <SelectValue placeholder="-" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -61,7 +67,7 @@ export const ProductVariant = ({ form }: { form: any }) => {
                       <FormLabel>Phân loại chi tiết</FormLabel>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Category" />
+                          <SelectValue placeholder="-" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -99,11 +105,36 @@ export const ProductVariant = ({ form }: { form: any }) => {
               )}
             />
           </div>
-          {form.watch(["productVariants.color"]) !== undefined ? (
+          {/* {form.watch(["productVariants.color"]) !== undefined ? (
             <FancyMultiSelect form={form} />
           ) : (
             <></>
-          )}
+          )} */}
+          <FormField
+            control={form.control}
+            name="productVariants.color"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Màu sắc</FormLabel>
+                <FormControl>
+                  <MultipleSelector
+                    creatable
+                    value={field.value}
+                    onChange={(e) => {
+                      field.onChange(e.map((value) => value.value));
+                    }}
+                    placeholder="Nhập màu sắc..."
+                    emptyIndicator={
+                      <p className="text-center text-lg leading-10 text-gray-600 dark:text-gray-400">
+                        no results found.
+                      </p>
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </CardContent>
       </div>
     </Card>

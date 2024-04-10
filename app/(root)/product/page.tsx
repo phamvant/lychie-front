@@ -28,8 +28,9 @@ const ProductPage = ({ session }: any) => {
             authorization: `Bearer ${session.backendTokens.accessToken}`,
           },
         });
+        console.log(ret);
         const products = await ret.json();
-        // setProducts(products);
+        setProducts(products);
       } catch (error) {
         console.log(error);
       } finally {

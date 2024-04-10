@@ -84,6 +84,10 @@ const ModifyProductPage = ({ session, productId }: any) => {
     },
   });
 
+  // useEffect(() => {
+  //   console.log(form.getValues("productVariants"));
+  // }, [form.watch(["productVariants"])]);
+
   useEffect(() => {
     setIsLoading(true);
     const getProduct = async () => {
