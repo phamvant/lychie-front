@@ -1,5 +1,4 @@
 "use client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form } from "@/components/ui/form";
 
 import { SaveButton } from "@/components/product/button-save";
@@ -266,17 +265,7 @@ const ModifyProductPage = ({ session, productId }: any) => {
               images={product.productImages}
               handleChange={handleChange}
             />
-            <Card
-              x-chunk="dashboard-07-chunk-5"
-              className="bg-white max-w-sm lg:max-w-xl"
-            >
-              <CardHeader>
-                <CardTitle>Lưu sản phẩm</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <SaveButton status={status} />
-              </CardContent>
-            </Card>
+            <SaveButton status={status} />
           </div>
         </div>
       </form>
