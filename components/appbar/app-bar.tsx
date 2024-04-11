@@ -1,12 +1,12 @@
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
+"use client";
+import { useSession } from "next-auth/react";
 import Sidebar from "../sidebar/side-bar";
 import AuthButton from "./auth-button/auth-button";
 import MainNav from "./main-nav";
 import Search from "./search";
 
-export async function AppBar() {
-  const session = await getServerSession(authOptions);
+export function AppBar() {
+  const { data: session, status } = useSession();
 
   return (
     <div className="z-50 border-b fixed top-0 w-screen backdrop-filter backdrop-blur-xl bg-red/50 lg:px-80">

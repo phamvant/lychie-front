@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { CategoryContext } from "@/app/(root)/layout";
+import { CategoryDto } from "@/app/(root)/product/category-dto";
+import { useContext, useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
@@ -36,12 +38,10 @@ const SIZE2 = ["10", "11", "12", "13.5", "14"];
 const SIZE3 = ["XS", "S", "M", "L", "XL"];
 
 export function ProductVariant({ form }: { form: any }) {
-  const [category, setCategory] = useState<string>("");
+  const { categories } = useContext(CategoryContext);
+  const [displayCategories, setDisplayCategories] = categories;
+  const [selectedCategory, setSelectedCategory] = useState<CategoryDto>();
   const [sizeType, setSizeType] = useState<string[]>(SIZE3);
-
-  useEffect(() => {
-    console.log(form.getValues("productVariants.size"));
-  }, form.watch(["productVariants.size"]));
 
   const onChangeSizeType = (e: string) => {
     switch (e) {
@@ -82,7 +82,12 @@ export function ProductVariant({ form }: { form: any }) {
                     <Select
                       onValueChange={(e) => {
                         field.onChange(e);
-                        setCategory(e);
+                        setSelectedCategory(
+                          displayCategories.find(
+                            (category: CategoryDto) =>
+                              category.categoryName === e
+                          )
+                        );
                       }}
                       defaultValue={field.value}
                     >
@@ -91,10 +96,15 @@ export function ProductVariant({ form }: { form: any }) {
                           <SelectValue placeholder="-" />
                         </SelectTrigger>
                       </FormControl>
+
                       <SelectContent>
-                        <SelectItem value="Clothes">Clothes</SelectItem>
-                        <SelectItem value="Dress">Dress</SelectItem>
-                        <SelectItem value="Bag">Bag</SelectItem>
+                        {displayCategories.map(
+                          (value: CategoryDto, index: string) => (
+                            <SelectItem value={value.categoryName} key={index}>
+                              {value.categoryName}
+                            </SelectItem>
+                          )
+                        )}
                       </SelectContent>
                     </Select>
                   </FormItem>
@@ -118,48 +128,53 @@ export function ProductVariant({ form }: { form: any }) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="T-shirts">T-Shirts</SelectItem>
-                        <SelectItem value="Hoodies">Hoodies</SelectItem>
-                        <SelectItem value="Sweatshirts">Sweatshirts</SelectItem>
+                        {selectedCategory ? (
+                          selectedCategory.categorySubName.map(
+                            (value, index) => (
+                              <SelectItem value={value} key={index}>
+                                {value}
+                              </SelectItem>
+                            )
+                          )
+                        ) : (
+                          <></>
+                        )}
                       </SelectContent>
                     </Select>
                   </FormItem>
                 )}
               />
             </div>
-            {category === "Bag" ? (
-              <div className="grid gap-3">
-                <FormField
-                  control={form.control}
-                  name="productVariants.sizeType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <Select
-                        onValueChange={(e) => {
-                          onChangeSizeType(e);
-                          field.onChange(e);
-                        }}
-                        value={field.value}
-                      >
-                        <FormLabel>Loại size</FormLabel>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="-" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="us">US</SelectItem>
-                          <SelectItem value="uk">UK</SelectItem>
-                          <SelectItem value="cn">CN</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormItem>
-                  )}
-                />
-              </div>
-            ) : (
-              <></>
-            )}
+            <div className="grid gap-3">
+              <FormField
+                control={form.control}
+                name="productVariants.sizeType"
+                render={({ field }) => (
+                  <FormItem>
+                    <Select
+                      onValueChange={(e) => {
+                        onChangeSizeType(e);
+                        field.onChange(e);
+                      }}
+                      value={field.value}
+                    >
+                      <FormLabel>Loại size</FormLabel>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="-" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="us">US</SelectItem>
+                        <SelectItem value="uk">UK</SelectItem>
+                        <SelectItem value="cn">CN</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
+            </div>
+
             <div className="hidden items-end lg:flex">
               <Button>Thêm phân loại</Button>
             </div>

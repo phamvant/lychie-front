@@ -18,31 +18,40 @@ const ProductPage = ({ session }: any) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    const getProductData = async () => {
+    const fetchData = async () => {
       setIsLoading(true);
 
       try {
-        const ret = await fetch(process.env.BACKEND_URL + "/product", {
-          method: "GET",
-          headers: {
-            authorization: `Bearer ${session.backendTokens.accessToken}`,
-          },
-        });
-        console.log(ret);
-        const products = await ret.json();
+        const productResponse = await fetch(
+          `${process.env.BACKEND_URL}/product`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${session.backendTokens.accessToken}`,
+            },
+          }
+        );
+
+        if (!productResponse.ok) {
+          throw new Error(
+            `Failed to fetch products: ${productResponse.statusText}`
+          );
+        }
+
+        const products = await productResponse.json();
         setProducts(products);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching data:", error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    getProductData();
+    fetchData();
   }, []);
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return <div>Loading...</div>;
   }
 
   return (

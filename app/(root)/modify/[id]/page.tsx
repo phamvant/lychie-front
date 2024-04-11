@@ -254,6 +254,7 @@ const ModifyProductPage = ({ session, productId }: any) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
+        {/* <fieldset disabled={true}> */}
         <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
           <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
             <ProductDetails form={form} />
@@ -268,6 +269,7 @@ const ModifyProductPage = ({ session, productId }: any) => {
             <SaveButton status={status} />
           </div>
         </div>
+        {/* </fieldset> */}
       </form>
     </Form>
   );
