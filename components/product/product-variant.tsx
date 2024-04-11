@@ -1,6 +1,6 @@
-import { CategoryContext } from "@/app/(root)/layout";
 import { CategoryDto } from "@/app/(root)/product/category-dto";
 import { useContext, useState } from "react";
+import { CategoryContext } from "../Providers";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {

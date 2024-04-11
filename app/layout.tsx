@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 
-import Providers from "@/components/Providers";
+import { ContextProvider, Providers } from "@/components/Providers";
 import { Toaster } from "@/components/ui/sonner";
 import dotenv from "dotenv";
 const fontSans = FontSans({
@@ -24,7 +24,9 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <ContextProvider>{children}</ContextProvider>
+        </Providers>
         <Toaster />
       </body>
     </html>
