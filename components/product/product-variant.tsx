@@ -1,7 +1,6 @@
 import { CategoryDto } from "@/app/(root)/product/category-dto";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CategoryContext } from "../Providers";
-import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   FormControl,
@@ -19,6 +18,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
+import { AddCategoryButton } from "./add-category-form";
 
 const COLOR = [
   "Xanh lam",
@@ -58,6 +58,23 @@ export function ProductVariant({ form }: { form: any }) {
     }
   };
 
+  useEffect(() => {
+    try {
+      setSelectedCategory(
+        displayCategories.find(
+          (category: CategoryDto) =>
+            category.categoryName === form.getValues("productCategory")
+        )
+      );
+
+      onChangeSizeType(form.getValues("productSizeType"));
+    } catch (e) {}
+  }, [displayCategories, form.watch(["productSizeType"])]);
+
+  if (!displayCategories) {
+    return <>Loading...</>;
+  }
+
   return (
     <Card
       x-chunk="dashboard-07-chunk-2"
@@ -67,7 +84,7 @@ export function ProductVariant({ form }: { form: any }) {
         <CardHeader className="grid grid-cols-8 items-center">
           <CardTitle className="col-span-5">Phân loại</CardTitle>
           <div className="col-span-3 lg:hidden">
-            <Button>Thêm phân loại</Button>
+            <AddCategoryButton />
           </div>
         </CardHeader>
         <CardContent className="flex flex-col gap-6">
@@ -176,7 +193,7 @@ export function ProductVariant({ form }: { form: any }) {
             </div>
 
             <div className="hidden items-end lg:flex">
-              <Button>Thêm phân loại</Button>
+              <AddCategoryButton />
             </div>
           </div>
           <div className="flex flex-col gap-3">

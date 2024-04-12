@@ -163,7 +163,7 @@ export const ProductPrice = ({ form }: { form: any }) => {
                   <FormLabel>Giá cuối</FormLabel>
                   <FormControl>
                     <Input
-                      readOnly={false}
+                      readOnly={true}
                       id="productFinalPrice"
                       type="number"
                       placeholder="Giá cuối"

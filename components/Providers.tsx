@@ -46,7 +46,7 @@ export const ContextProvider = ({ children }: Props) => {
 
         const categories = await categoryResponse.json();
         setCategories(categories);
-        console.log(categories);
+        // console.log(categories);
       } catch (error) {
         console.error("Error fetching data:", error);
       } finally {

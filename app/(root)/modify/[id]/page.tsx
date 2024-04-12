@@ -1,7 +1,7 @@
 "use client";
 import { Form } from "@/components/ui/form";
 
-import { SaveButton } from "@/components/product/button-save";
+import { AddToCardButton } from "@/components/product/add-cart-button";
 import { ImageField } from "@/components/product/image-field";
 import { ProductDetails } from "@/components/product/product-details";
 import { ProductPrice } from "@/components/product/product-price";
@@ -113,6 +113,7 @@ const ModifyProductPage = ({ session, productId }: any) => {
         form.setValue("productCategory", product.productCategory);
         form.setValue("productSubCategory", product.productSubCategory);
         form.setValue("productVariants", product.productVariants);
+        form.setValue("productMemo", product.productMemo);
       } catch (error) {
         console.log(error);
       } finally {
@@ -251,27 +252,38 @@ const ModifyProductPage = ({ session, productId }: any) => {
     setPreviewUrls(updatedPreviewUrls);
   };
 
+  {
+    /* <fieldset disabled={true}> */
+  }
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
-        {/* <fieldset disabled={true}> */}
-        <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
-          <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
-            <ProductDetails form={form} />
-            <ProductPrice form={form} />
-            <ProductVariant form={form} />
+    <div>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
+            <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
+              <ProductDetails form={form} />
+              <ProductPrice form={form} />
+              <ProductVariant form={form} />
+            </div>
+            <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
+              <ImageField
+                images={product.productImages}
+                handleChange={handleChange}
+              />
+              {/* <SaveButton status={status} /> */}
+            </div>
           </div>
-          <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-            <ImageField
-              images={product.productImages}
-              handleChange={handleChange}
-            />
-            <SaveButton status={status} />
-          </div>
-        </div>
-        {/* </fieldset> */}
-      </form>
-    </Form>
+          {/* </fieldset> */}
+        </form>
+      </Form>
+      <AddToCardButton
+        props={{
+          variant: product.productVariants,
+          productId: product.productId,
+          productName: product.productName,
+        }}
+      />
+    </div>
   );
 };
 

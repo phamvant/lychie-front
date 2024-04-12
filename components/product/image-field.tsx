@@ -31,6 +31,7 @@ export const ImageField = ({
               .filter((value, index) => index !== 0)
               .map((url, index) => (
                 <Image
+                  key={index}
                   alt="Product image"
                   className="aspect-square w-full rounded-md object-cover"
                   height="84"
