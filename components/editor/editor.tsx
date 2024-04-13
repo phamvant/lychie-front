@@ -25,7 +25,6 @@ const uploadToTmpFilesDotOrg_DEV_ONLY = async (file: File): Promise<string> => {
 
     return newUrl;
   } else {
-    console.log(response.statusText);
     return response.statusText;
   }
 };

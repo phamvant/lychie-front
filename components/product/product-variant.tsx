@@ -1,4 +1,6 @@
-import { CategoryDto } from "@/app/(root)/product/category-dto";
+"use client";
+
+import { CategoryDto } from "@/models/category-dto";
 import { useContext, useEffect, useState } from "react";
 import { CategoryContext } from "../Providers";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
@@ -37,7 +39,13 @@ const SIZE1 = ["1", "2.5", "3", "4.5", "5"];
 const SIZE2 = ["10", "11", "12", "13.5", "14"];
 const SIZE3 = ["XS", "S", "M", "L", "XL"];
 
-export function ProductVariant({ form }: { form: any }) {
+export function ProductVariant({
+  form,
+  onCategoryChange,
+}: {
+  form: any;
+  onCategoryChange?: any;
+}) {
   const { categories } = useContext(CategoryContext);
   const [displayCategories, setDisplayCategories] = categories;
   const [selectedCategory, setSelectedCategory] = useState<CategoryDto>();
@@ -99,6 +107,7 @@ export function ProductVariant({ form }: { form: any }) {
                     <Select
                       onValueChange={(e) => {
                         field.onChange(e);
+                        onCategoryChange();
                         setSelectedCategory(
                           displayCategories.find(
                             (category: CategoryDto) =>
@@ -135,7 +144,10 @@ export function ProductVariant({ form }: { form: any }) {
                 render={({ field }) => (
                   <FormItem>
                     <Select
-                      onValueChange={field.onChange}
+                      onValueChange={(e) => {
+                        field.onChange(e);
+                        onCategoryChange();
+                      }}
                       defaultValue={field.value}
                     >
                       <FormLabel>Phân loại chi tiết</FormLabel>
@@ -209,7 +221,6 @@ export function ProductVariant({ form }: { form: any }) {
                     className="grid grid-cols-8 lg:grid-cols-12"
                     value={field.value}
                     onValueChange={(e) => {
-                      console.log("e", e);
                       field.onChange(e);
                     }}
                   >

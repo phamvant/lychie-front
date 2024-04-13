@@ -22,7 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Input } from "../ui/input";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
@@ -48,10 +48,6 @@ export const AddToCardButton = ({ props }: any) => {
       productId: props.productId,
     },
   });
-
-  useEffect(() => {
-    console.log(props);
-  }, []);
 
   // async function onSubmitCart(values: z.infer<typeof formSchema>) {
   //   setStatus("fetching");

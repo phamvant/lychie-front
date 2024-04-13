@@ -2,23 +2,21 @@ import Image from "next/image";
 
 import { cn } from "@/lib/utils";
 
-import { ProductDto } from "@/app/(root)/product/product-dto";
-import Link from "next/link";
+import { ProductDto } from "@/models/product-dto";
+import { CheckCircle2 } from "lucide-react";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   product: ProductDto;
   aspectRatio?: "portrait" | "square";
   width?: number;
   height?: number;
-  isLoading: boolean;
 }
 
-export function ProductImage({
+export async function ProductImage({
   product,
   aspectRatio = "portrait",
   width,
   height,
-  isLoading,
   className,
   ...props
 }: Props) {
@@ -28,24 +26,29 @@ export function ProductImage({
       {...props}
     >
       <Image
-        src={isLoading ? "/placeholder.svg" : product.productImages[0]}
-        alt={product.productName}
+        src={product.productImages[0]}
+        alt={product.productCode}
         width={width}
+        priority={true}
         height={height}
         className={cn(
           "h-auto w-auto object-cover transition-all hover:scale-105 rounded-2xl aspect-square shadow-xl mb-4"
         )}
       />
-      <Link href={`/modify/${product.productId}`}>
-        <div className="flex flex-col gap-2">
-          <h3 className="leading-2 text-md text-gray-600 mb-2 min-h-[48px]">
-            {product.productName}
-          </h3>
-          <div>
-            <p className="text-sm font-bold">Giá: {product.productPrice}đ</p>
-          </div>
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between">
+          <h3 className="text-md text-gray-600 mb-2">#{product.productCode}</h3>
+          {product.productIsPosted ? (
+            <CheckCircle2 className="rounded-full text-green-400" />
+          ) : (
+            <></>
+          )}
         </div>
-      </Link>
+
+        <div>
+          <p className="text-sm font-bold">Giá: {product.productPrice}đ</p>
+        </div>
+      </div>
     </div>
   );
 }

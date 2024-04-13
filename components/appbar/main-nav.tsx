@@ -1,9 +1,6 @@
-"use client";
-
 import Link from "next/link";
 
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 export const navBarContent = [
   {
     title: "Overview",
@@ -17,19 +14,13 @@ export const navBarContent = [
     title: "Product",
     href: "/product",
   },
-  {
-    title: "Editor",
-    href: "/editor",
-  },
 ];
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
   isLogged: boolean;
 }
 
-const MainNav = ({ className, isLogged, ...props }: Props) => {
-  const [activePage, setActivePage] = useState(0);
-
+const MainNav = async ({ className, isLogged, ...props }: Props) => {
   return (
     <nav
       className={cn("flex items-center space-x-4 lg:space-x-6", className)}
@@ -41,10 +32,8 @@ const MainNav = ({ className, isLogged, ...props }: Props) => {
             <Link
               key={index}
               href={prop.href}
-              onClick={() => setActivePage(index)}
-              className={`text-sm font-medium transition-colors ${
-                activePage === index ? "" : "text-muted-foreground"
-              } hover:text-primary`}
+              prefetch={true}
+              className={`text-sm font-medium transition-colors  hover:text-primary`}
             >
               {prop.title}
             </Link>

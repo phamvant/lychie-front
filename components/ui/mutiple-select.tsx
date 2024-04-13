@@ -159,18 +159,11 @@ const MultipleSelector = React.forwardRef<
 
     const handleUnselect = React.useCallback(
       (option: string) => {
-        // console.log(option);
         const newOptions = selected.filter((s) => s !== option);
-        // console.log(newOptions);
-        // setSelected(newOptions);
         onChange?.(newOptions);
       },
       [onChange, selected]
     );
-
-    // useEffect(() => {
-    //   console.log(selected);
-    // }, [selected]);
 
     const handleKeyDown = React.useCallback(
       (e: React.KeyboardEvent<HTMLDivElement>) => {

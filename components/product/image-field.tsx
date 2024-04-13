@@ -4,10 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export const ImageField = ({
   images,
-  handleChange,
+  handleImageUpload,
 }: {
   images: string[];
-  handleChange: any;
+  handleImageUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
     <Card
@@ -31,6 +31,7 @@ export const ImageField = ({
               .filter((value, index) => index !== 0)
               .map((url, index) => (
                 <Image
+                  priority={true}
                   key={index}
                   alt="Product image"
                   className="aspect-square w-full rounded-md object-cover"
@@ -49,7 +50,7 @@ export const ImageField = ({
                 type="file"
                 id="fileInput"
                 multiple
-                onChange={handleChange}
+                onChange={handleImageUpload}
               />
               <Upload className="h-4 w-4 text-muted-foreground" />
             </label>

@@ -95,9 +95,7 @@ export const AddCategoryButton = () => {
           <Form {...form}>
             <form
               onSubmit={(e) => {
-                console.log(e);
                 e.stopPropagation();
-                // form.handleSubmit((e.));
                 onSubmitCategory({
                   categoryName: form.getValues("categoryName"),
                   categorySubName: form.getValues("categorySubName"),

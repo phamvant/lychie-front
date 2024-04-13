@@ -1,6 +1,7 @@
 "use client";
 
-import { CategoryDto } from "@/app/(root)/product/category-dto";
+import { CategoryDto } from "@/models/category-dto";
+import { UserDto } from "@/models/user-dto";
 import { Session } from "next-auth";
 import { SessionProvider, useSession } from "next-auth/react";
 import { createContext, useEffect, useState } from "react";
@@ -12,6 +13,7 @@ interface Props {
 export const CategoryContext = createContext<{
   categories: any;
   session: Session | null;
+  // userProductsAmount: number | undefined;
 }>({ categories: [], session: null });
 
 export const Providers = ({ children }: Props) => {
@@ -20,13 +22,11 @@ export const Providers = ({ children }: Props) => {
 
 export const ContextProvider = ({ children }: Props) => {
   const [categories, setCategories] = useState<CategoryDto[]>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [user, setUser] = useState<UserDto>();
   const { data: session, status } = useSession();
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-
+    const fetchCategoryData = async () => {
       try {
         const categoryResponse = await fetch(
           `${process.env.BACKEND_URL}/category`,
@@ -46,22 +46,47 @@ export const ContextProvider = ({ children }: Props) => {
 
         const categories = await categoryResponse.json();
         setCategories(categories);
-        // console.log(categories);
       } catch (error) {
         console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false);
+      }
+    };
+
+    const getUserData = async () => {
+      try {
+        const userResponse = await fetch(
+          `${process.env.BACKEND_URL}/user/${session?.user.id}`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${session?.backendTokens.accessToken}`,
+            },
+          }
+        );
+
+        if (!userResponse.ok) {
+          throw new Error("Failed to fetch user");
+        }
+
+        const userDate = (await userResponse.json()) as UserDto;
+        setUser(userDate);
+      } catch (error) {
+        console.error("Error fetching data:", error);
       }
     };
 
     if (session) {
-      fetchData();
+      fetchCategoryData();
+      // getUserData();
     }
   }, [session]);
 
   return (
     <CategoryContext.Provider
-      value={{ categories: [categories, setCategories], session: session }}
+      value={{
+        categories: [categories, setCategories],
+        session: session,
+        // userProductsAmount: user?.userProductsAmount,
+      }}
     >
       {children}{" "}
     </CategoryContext.Provider>
