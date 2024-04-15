@@ -51,29 +51,6 @@ export const ContextProvider = ({ children }: Props) => {
       }
     };
 
-    const getUserData = async () => {
-      try {
-        const userResponse = await fetch(
-          `${process.env.BACKEND_URL}/user/${session?.user.id}`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${session?.backendTokens.accessToken}`,
-            },
-          }
-        );
-
-        if (!userResponse.ok) {
-          throw new Error("Failed to fetch user");
-        }
-
-        const userDate = (await userResponse.json()) as UserDto;
-        setUser(userDate);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
     if (session) {
       fetchCategoryData();
       // getUserData();

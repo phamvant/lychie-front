@@ -55,16 +55,14 @@ const ProductPage = async () => {
         <CardContent className="pr-0 lg:pr-6">
           <div className="grid lg:grid-cols-4 grid-cols-2 lg:gap-x-12 lg:gap-y-20">
             {productData.map((product) => (
-              <Link prefetch={true} href={`product/${product.productId}`}>
-                <ProductImage
-                  key={product.productId}
-                  product={product}
-                  className="lg:w-[240px] w-[150px]"
-                  aspectRatio="square"
-                  width={150}
-                  height={150}
-                />
-              </Link>
+              <ProductImage
+                key={product.productId}
+                product={product}
+                className="lg:w-[240px] w-[150px]"
+                aspectRatio="square"
+                width={150}
+                height={150}
+              />
             ))}
           </div>
         </CardContent>

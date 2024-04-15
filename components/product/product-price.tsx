@@ -1,3 +1,9 @@
+"use client";
+
+import {
+  addThousandSeparator,
+  removeThousandSeparator,
+} from "@/utils/thousands-separator";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   FormControl,
@@ -60,11 +66,15 @@ export const ProductPrice = ({ form }: { form: any }) => {
                     <FormControl>
                       <Input
                         id="name"
-                        type="number"
+                        type="text"
                         placeholder="Giá nhập"
                         className="w-full"
-                        onChange={field.onChange}
-                        defaultValue={field.value}
+                        onChange={(e) => {
+                          field.onChange(
+                            removeThousandSeparator(e.target.value)
+                          );
+                        }}
+                        value={addThousandSeparator(field.value)}
                       />
                     </FormControl>
                     <FormMessage />
@@ -82,14 +92,16 @@ export const ProductPrice = ({ form }: { form: any }) => {
                     <FormControl>
                       <Input
                         id="productPrice"
-                        type="number"
+                        type="text"
                         placeholder="Giá bán"
                         className="w-full"
                         onChange={(e) => {
-                          field.onChange(e.target.value);
+                          field.onChange(
+                            removeThousandSeparator(e.target.value)
+                          );
                           onChangePrice();
                         }}
-                        defaultValue={field.value}
+                        value={addThousandSeparator(field.value)}
                       />
                     </FormControl>
                     <FormMessage />
@@ -110,7 +122,7 @@ export const ProductPrice = ({ form }: { form: any }) => {
                         field.onChange(e);
                         onChangePrice();
                       }}
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -145,7 +157,7 @@ export const ProductPrice = ({ form }: { form: any }) => {
                           field.onChange(e.target.value);
                           onChangePrice();
                         }}
-                        defaultValue={field.value}
+                        value={field.value}
                       />
                     </FormControl>
                     <FormMessage />
@@ -165,10 +177,14 @@ export const ProductPrice = ({ form }: { form: any }) => {
                     <Input
                       readOnly={true}
                       id="productFinalPrice"
-                      type="number"
+                      type="text"
                       placeholder="Giá cuối"
                       className="w-full"
-                      {...field}
+                      onChange={(e) => {
+                        field.onChange(removeThousandSeparator(e.target.value));
+                        onChangePrice();
+                      }}
+                      value={addThousandSeparator(field.value)}
                     />
                   </FormControl>
                   <FormMessage />

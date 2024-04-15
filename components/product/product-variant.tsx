@@ -115,7 +115,7 @@ export function ProductVariant({
                           )
                         );
                       }}
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormControl>
                         <SelectTrigger>
@@ -148,7 +148,7 @@ export function ProductVariant({
                         field.onChange(e);
                         onCategoryChange();
                       }}
-                      defaultValue={field.value}
+                      value={field.value}
                     >
                       <FormLabel>Phân loại chi tiết</FormLabel>
                       <FormControl>
@@ -186,6 +186,7 @@ export function ProductVariant({
                         field.onChange(e);
                       }}
                       value={field.value}
+                      defaultValue="cn"
                     >
                       <FormLabel>Loại size</FormLabel>
                       <FormControl>

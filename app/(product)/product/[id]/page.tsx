@@ -10,7 +10,9 @@ import { ProductVariant } from "@/components/product/product-variant";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { productSchema } from "@/lib/zod/product-schema";
 import { getChangedFields } from "@/utils/get-changed-field";
+import { categoryToCode, codeGenerate } from "@/utils/product-code-generate";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Session } from "next-auth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -34,7 +36,33 @@ const initialProduct: ProductDto = {
   productIsPosted: false,
 };
 
-const ModifyProductPage = ({ session, productId, products }: any) => {
+const fetchProductsData = async (session: Session, productId: string) => {
+  try {
+    const productResponse = await fetch(
+      `${process.env.BACKEND_URL}/product/${productId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${session.backendTokens.accessToken}`,
+        },
+        cache: "no-cache",
+      }
+    );
+
+    if (!productResponse.ok) {
+      throw new Error(
+        `Failed to fetch products: ${productResponse.statusText}`
+      );
+    }
+
+    const products = await productResponse.json();
+    return products;
+  } catch (e) {
+    return false;
+  }
+};
+
+const ModifyProductPage = ({ session, productId }: any) => {
   const [status, setStatus] = useState<string>("idle");
   const [product, setProduct] = useState<ProductDto>(initialProduct);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -58,13 +86,21 @@ const ModifyProductPage = ({ session, productId, products }: any) => {
     },
   });
 
+  const onCategoryChange = () => {
+    const code = codeGenerate(
+      form.getValues("productCategory") as keyof typeof categoryToCode,
+      form.getValues("productSubCategory") as keyof typeof categoryToCode
+    );
+  };
+
   useEffect(() => {
     setIsLoading(true);
     const getProduct = async () => {
       try {
-        const product = products.find(
-          (product: any) => product.productId === productId
-        );
+        const product = (await fetchProductsData(
+          session,
+          productId
+        )) as ProductDto;
 
         if (!product) {
           throw new Error();
@@ -101,7 +137,7 @@ const ModifyProductPage = ({ session, productId, products }: any) => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {};
 
   const modifyObject = async (queryObj: Record<string, any>) => {
-    const registerResponse = await fetch(
+    const modifyResponse = await fetch(
       process.env.BACKEND_URL + `/product/modify/${productId}`,
       {
         method: "PUT",
@@ -113,7 +149,7 @@ const ModifyProductPage = ({ session, productId, products }: any) => {
       }
     );
 
-    return registerResponse;
+    return modifyResponse;
   };
 
   const onSubmit = async (values: z.infer<typeof productSchema>) => {
@@ -151,7 +187,7 @@ const ModifyProductPage = ({ session, productId, products }: any) => {
           <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
             <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
               <ProductDetails form={form} />
-              <ProductVariant form={form} />
+              <ProductVariant form={form} onCategoryChange={onCategoryChange} />
               <ProductPrice form={form} />
             </div>
             <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
