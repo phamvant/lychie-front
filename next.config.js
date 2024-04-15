@@ -9,7 +9,7 @@
 
 module.exports = {
   env: {
-    BACKEND_URL: "https://lychie-back.onrender.com",
+    BACKEND_URL: "54.250.208.160:8080",
   },
   images: {
     domains: [
