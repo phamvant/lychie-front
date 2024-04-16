@@ -5,6 +5,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 import { ProductDto } from "@/models/product-dto";
+import { addThousandSeparator } from "@/utils/thousands-separator";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Checkbox } from "../ui/checkbox";
@@ -84,7 +85,9 @@ export function ProductImage({
         </div>
 
         <div>
-          <p className="text-sm font-bold">Giá: {product.productPrice}đ</p>
+          <p className="text-sm font-bold">
+            Giá: {addThousandSeparator(product.productPrice)}đ
+          </p>
         </div>
       </div>
     </div>

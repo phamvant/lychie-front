@@ -50,7 +50,7 @@ const SignUpForm = () => {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsFetching((prev: boolean) => !prev);
 
-    const res = await fetch("https://lychie-back.onrender.com/auth/register", {
+    const res = await fetch(process.env.BACKEND_URL + "/auth/register", {
       method: "POST",
       body: JSON.stringify({
         userUsername: values.username,

@@ -14,6 +14,10 @@ export const navBarContent = [
     title: "Product",
     href: "/product",
   },
+  {
+    title: "Cart",
+    href: "/cart",
+  },
 ];
 
 interface Props extends React.HTMLAttributes<HTMLElement> {
@@ -27,7 +31,7 @@ const MainNav = async ({ className, isLogged, ...props }: Props) => {
       {...props}
     >
       {navBarContent.map((prop, index) => {
-        if (prop.title !== (isLogged ? "" : "Editor")) {
+        if (prop.title !== (isLogged ? "" : "Product")) {
           return (
             <Link
               key={index}
