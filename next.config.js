@@ -9,7 +9,7 @@
 
 module.exports = {
   env: {
-    BACKEND_URL: "https://www.ptops.xyz",
+    BACKEND_URL: "https://ptops.xyz",
   },
   images: {
     domains: [
