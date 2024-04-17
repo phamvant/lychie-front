@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -28,12 +30,11 @@ import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
 const formSchema = z.object({
   productId: z.string(),
-  productName: z.string().min(5),
-  productVariant: z.object({
-    size: z.array(z.string()),
-    color: z.array(z.string()),
+  cartProductVariants: z.object({
+    size: z.string(),
+    color: z.string(),
   }),
-  productAmount: z.coerce.number().min(1),
+  cartProductAmount: z.coerce.number().min(1),
 });
 
 export const AddToCardButton = ({ props }: any) => {
@@ -43,49 +44,44 @@ export const AddToCardButton = ({ props }: any) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      productName: props.productName,
-      productVariant: {},
+      cartProductVariants: {},
       productId: props.productId,
     },
   });
 
-  // async function onSubmitCart(values: z.infer<typeof formSchema>) {
-  //   setStatus("fetching");
+  async function onSubmitCart(values: z.infer<typeof formSchema>) {
+    setStatus("fetching");
+    console.log(values);
 
-  //   const queryObj = { ...values, categorySubName: [values.categorySubName] };
-  //   try {
-  //     //----------------ProductRegiter----------------//
+    try {
+      const registerResponse = await fetch(
+        process.env.BACKEND_URL + "/cart/add",
+        {
+          method: "POST",
+          body: JSON.stringify(values),
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${session?.backendTokens.accessToken}`,
+          },
+        }
+      );
 
-  //     const registerResponse = await fetch(
-  //       process.env.BACKEND_URL + "/category/create",
-  //       {
-  //         method: "POST",
-  //         body: JSON.stringify(queryObj),
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           authorization: `Bearer ${session?.backendTokens.accessToken}`,
-  //         },
-  //       }
-  //     );
+      if (!registerResponse.ok) {
+        setStatus("error");
+        console.error(
+          "Error registering product:",
+          await registerResponse.text()
+        );
 
-  //     if (!registerResponse.ok) {
-  //       setStatus("failed");
-  //       // Handle registration request error
-  //       console.error(
-  //         "Error registering product:",
-  //         await registerResponse.text()
-  //       );
+        throw new Error();
+      }
 
-  //       throw new Error();
-  //     }
-
-  //     setStatus("success");
-  //     () => toast("Product has been created");
-  //   } catch (error) {
-  //     setStatus("error");
-  //     console.error("Error during concurrent requests:", error);
-  //   }
-  // }
+      setStatus("success");
+    } catch (error) {
+      setStatus("error");
+      console.error("Error during concurrent requests:", error);
+    }
+  }
 
   return (
     <Dialog>
@@ -105,17 +101,17 @@ export const AddToCardButton = ({ props }: any) => {
         <div className="flex flex-col gap-6">
           <Form {...form}>
             <form
-              // onSubmit={form.handleSubmit(onSubmitCart)}
+              onSubmit={form.handleSubmit(onSubmitCart)}
               className="flex flex-col gap-6"
             >
               <FormField
                 control={form.control}
-                name="productVariant.color"
+                name="cartProductVariants.color"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Màu sắc</FormLabel>
                     <ToggleGroup
-                      type="multiple"
+                      type="single"
                       variant="outline"
                       className="grid grid-cols-3 lg:grid-cols-5"
                       value={field.value}
@@ -140,12 +136,12 @@ export const AddToCardButton = ({ props }: any) => {
               />
               <FormField
                 control={form.control}
-                name="productVariant.size"
+                name="cartProductVariants.size"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Size</FormLabel>
                     <ToggleGroup
-                      type="multiple"
+                      type="single"
                       variant="outline"
                       className="grid grid-cols-6 lg:grid-cols-9"
                       value={field.value}
@@ -170,7 +166,7 @@ export const AddToCardButton = ({ props }: any) => {
               />
               <FormField
                 control={form.control}
-                name="productAmount"
+                name="cartProductAmount"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Số lượng</FormLabel>
@@ -192,7 +188,7 @@ export const AddToCardButton = ({ props }: any) => {
               />
 
               <Button
-                disabled={status === "fetching"}
+                // disabled={status === "fetching"}
                 variant={
                   (status === "success" || status === "error" ? true : false)
                     ? "secondary"

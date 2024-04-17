@@ -6,6 +6,23 @@ const productVariantSchema = {
   material: z.string().optional(),
 };
 
+const cartVariantSchema = {
+  size: z.coerce.number(),
+  color: z.string(),
+};
+
+export const cartSchema = z.object({
+  cartProductId: z.string(),
+  cartProductCode: z.string(),
+  cartProductVariant: z.object(cartVariantSchema),
+  cartProductAmount: z.coerce.number(),
+  cartProductPrice: z.coerce.number(),
+  cartProductFinalPrice: z.coerce.number(),
+  cartPrice: z.coerce.number(),
+  cartFinalPrice: z.coerce.number(),
+  cartCartId: z.string().default("661e9520d5c458cbcfcf3117"),
+});
+
 export const productSchema = z
   .object({
     productName: z.string().optional(),
