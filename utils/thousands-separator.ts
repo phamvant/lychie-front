@@ -28,7 +28,7 @@ export function addThousandSeparator(number: number): string {
 
 export function removeThousandSeparator(text: string): number {
   // Remove any commas in the text
-  let stringWithoutCommas: string = text.replace(/./g, "");
+  let stringWithoutCommas: string = text.replace(/\./g, "");
 
   // Parse the string to a number
   let number: number = parseFloat(stringWithoutCommas);

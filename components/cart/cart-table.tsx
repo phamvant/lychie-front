@@ -93,6 +93,9 @@ const CartTable = ({
     }
 
     setStatus("success");
+    setProduct(
+      products.filter((product) => product.cartProductId != cartProductId)
+    );
   };
 
   return (
@@ -145,14 +148,14 @@ const CartTable = ({
             <TableCell className="sm:text-center">
               <div className="font-medium">
                 {addThousandSeparator(
-                  product.cartProduct.productPrice * product.cartProductAmount
+                  product.cartProduct.productFinalPrice *
+                    product.cartProductAmount
                 )}
                 đ
               </div>
               <div className="hidden text-xs text-muted-foreground md:inline line-through">
                 {addThousandSeparator(
-                  product.cartProduct.productFinalPrice *
-                    product.cartProductAmount
+                  product.cartProduct.productPrice * product.cartProductAmount
                 )}
                 đ
               </div>
