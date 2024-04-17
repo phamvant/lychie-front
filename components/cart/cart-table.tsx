@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { PenIcon, TrashIcon } from "lucide-react";
 import { Session } from "next-auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { StateButton } from "../button/three-states-button";
@@ -38,17 +38,24 @@ const formSchema = z.object({
 });
 
 const CartTable = ({
-  products,
+  productsProp,
   session,
 }: {
-  products: CartDto[];
+  productsProp: CartDto[];
   session: Session;
 }) => {
+  const [products, setProduct] = useState<CartDto[]>([]);
   const [status, setStatus] = useState<string>("idle");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {},
   });
+
+  useEffect(() => {
+    if (productsProp) {
+      setProduct(productsProp);
+    }
+  }, []);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setStatus("fetching");

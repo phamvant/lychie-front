@@ -120,7 +120,7 @@ const CartPage = async () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <CartTable products={products} session={session} />
+                <CartTable productsProp={products} session={session} />
               </CardContent>
             </Card>
           </TabsContent>
