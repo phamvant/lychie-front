@@ -6,9 +6,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { PenIcon, TrashIcon } from "lucide-react";
 import { Session } from "next-auth";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { CategoryContext } from "../Providers";
 import { StateButton } from "../button/three-states-button";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -44,6 +45,8 @@ const CartTable = ({
   productsProp: CartDto[];
   session: Session;
 }) => {
+  const { cartNumber } = useContext(CategoryContext);
+  const [orderAmount, setOrderAmount] = cartNumber;
   const [products, setProduct] = useState<CartDto[]>([]);
   const [status, setStatus] = useState<string>("idle");
   const form = useForm<z.infer<typeof formSchema>>({
@@ -93,6 +96,7 @@ const CartTable = ({
     }
 
     setStatus("success");
+    setOrderAmount((prev: number) => prev - 1);
     setProduct(
       products.filter((product) => product.cartProductId != cartProductId)
     );
@@ -116,6 +120,7 @@ const CartTable = ({
             Số lượng
           </TableHead>
           <TableHead className="text-right sm:text-center">Tổng giá</TableHead>
+          <TableHead className="text-right sm:text-center">Khách</TableHead>
           <TableHead className="text-right sm:text-center">Thao tác</TableHead>
         </TableRow>
       </TableHeader>
@@ -159,6 +164,9 @@ const CartTable = ({
                 )}
                 đ
               </div>
+            </TableCell>
+            <TableCell className="hidden sm:table-cell sm:text-center text-md">
+              {product.cartCustomerName}
             </TableCell>
             <TableCell className="flex justify-around">
               <Dialog>

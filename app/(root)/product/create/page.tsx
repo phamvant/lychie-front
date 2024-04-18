@@ -1,6 +1,7 @@
 "use client";
 import { Form } from "@/components/ui/form";
 
+import { CategoryContext } from "@/components/Providers";
 import { StateButton } from "@/components/button/three-states-button";
 import { ImageField } from "@/components/product/image-field";
 import { ProductDetails } from "@/components/product/product-details";
@@ -10,14 +11,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { productSchema } from "@/lib/zod/product-schema";
 import { ProductDto } from "@/models/product-dto";
 import { UserDto } from "@/models/user-dto";
-import { categoryToCode, codeGenerate } from "@/utils/product-code-generate";
+import { codeGenerate } from "@/utils/product-code-generate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import _ from "lodash";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const CreateProductPage = ({ session }: any) => {
+  const { categories } = useContext(CategoryContext);
   const [status, setStatus] = useState<string>("idle");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState([]);
@@ -25,9 +27,10 @@ const CreateProductPage = ({ session }: any) => {
 
   const onCategoryChange = () => {
     const code = codeGenerate(
-      form.getValues("productCategory") as keyof typeof categoryToCode,
-      form.getValues("productSubCategory") as keyof typeof categoryToCode
-    );
+      form.getValues("productCategory"),
+      form.getValues("productSubCategory") as string,
+      categories[0]
+    ).toString();
 
     form.setValue("productCode", code + productAmount);
   };

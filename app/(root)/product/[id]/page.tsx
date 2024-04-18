@@ -10,7 +10,6 @@ import { ProductVariant } from "@/components/product/product-variant";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { productSchema } from "@/lib/zod/product-schema";
 import { getChangedFields } from "@/utils/get-changed-field";
-import { categoryToCode, codeGenerate } from "@/utils/product-code-generate";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
@@ -86,12 +85,12 @@ const ModifyProductPage = ({ session, productId }: any) => {
     },
   });
 
-  const onCategoryChange = () => {
-    const code = codeGenerate(
-      form.getValues("productCategory") as keyof typeof categoryToCode,
-      form.getValues("productSubCategory") as keyof typeof categoryToCode
-    );
-  };
+  // const onCategoryChange = () => {
+  //   const code = codeGenerate(
+  //     form.getValues("productCategory") as keyof typeof categoryToCode,
+  //     form.getValues("productSubCategory") as keyof typeof categoryToCode
+  //   );
+  // };
 
   useEffect(() => {
     setIsLoading(true);
@@ -187,7 +186,7 @@ const ModifyProductPage = ({ session, productId }: any) => {
           <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
             <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
               <ProductDetails form={form} />
-              <ProductVariant form={form} onCategoryChange={onCategoryChange} />
+              <ProductVariant form={form} onCategoryChange={() => {}} />
               <ProductPrice form={form} />
             </div>
             <div className="grid auto-rows-max items-start gap-4 lg:gap-8">

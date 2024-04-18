@@ -32,6 +32,9 @@ export function removeThousandSeparator(text: string): number {
 
   // Parse the string to a number
   let number: number = parseFloat(stringWithoutCommas);
+  if (!number) {
+    number = 0;
+  }
 
   return number;
 }

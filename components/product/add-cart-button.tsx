@@ -24,7 +24,8 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useSession } from "next-auth/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { CategoryContext } from "../Providers";
 import { Input } from "../ui/input";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
@@ -35,9 +36,12 @@ const formSchema = z.object({
     color: z.string(),
   }),
   cartProductAmount: z.coerce.number().min(1),
+  cartCustomerName: z.string(),
 });
 
 export const AddToCardButton = ({ props }: any) => {
+  const { cartNumber } = useContext(CategoryContext);
+  const [orderAmount, setOrderAmount] = cartNumber;
   const [status, setStatus] = useState<string>("idle");
   const { data: session } = useSession();
 
@@ -77,6 +81,7 @@ export const AddToCardButton = ({ props }: any) => {
       }
 
       setStatus("success");
+      setOrderAmount((prev: number) => prev + 1);
     } catch (error) {
       setStatus("error");
       console.error("Error during concurrent requests:", error);
@@ -186,7 +191,27 @@ export const AddToCardButton = ({ props }: any) => {
                   </FormItem>
                 )}
               />
-
+              <FormField
+                control={form.control}
+                name="cartCustomerName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Số lượng</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="cartCustomerName"
+                        type="text"
+                        placeholder="Tên khách hàng"
+                        className="w-full"
+                        onChange={(e) => {
+                          field.onChange(e.target.value);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button
                 // disabled={status === "fetching"}
                 variant={

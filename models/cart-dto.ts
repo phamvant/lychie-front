@@ -4,6 +4,7 @@ export interface CartDto {
   cartProductAmount: number;
   cartProductPrice: number;
   cartProductFinalPrice: number;
+  cartCustomerName: string;
   cartProduct: {
     productCode: string;
     productPrice: number;

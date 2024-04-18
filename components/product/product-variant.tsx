@@ -35,9 +35,8 @@ const COLOR = [
   "Đen",
 ];
 
-const SIZE1 = ["1", "2.5", "3", "4.5", "5"];
-const SIZE2 = ["10", "11", "12", "13.5", "14"];
-const SIZE3 = ["XS", "S", "M", "L", "XL"];
+const SIZE1 = ["34", "35", "36", "37", "38", "39", "40"];
+const SIZE2 = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 
 export function ProductVariant({
   form,
@@ -49,18 +48,16 @@ export function ProductVariant({
   const { categories } = useContext(CategoryContext);
   const [displayCategories, setDisplayCategories] = categories;
   const [selectedCategory, setSelectedCategory] = useState<CategoryDto>();
-  const [sizeType, setSizeType] = useState<string[]>(SIZE3);
+  const [sizeType, setSizeType] = useState<string[]>(SIZE1);
 
   const onChangeSizeType = (e: string) => {
     switch (e) {
-      case "us":
+      case "number":
         setSizeType(SIZE1);
         break;
-      case "uk":
+      case "text":
         setSizeType(SIZE2);
         break;
-      case "cn":
-        setSizeType(SIZE3);
       default:
         break;
     }
@@ -185,8 +182,8 @@ export function ProductVariant({
                         onChangeSizeType(e);
                         field.onChange(e);
                       }}
-                      value={field.value}
-                      defaultValue="cn"
+                      value={form.value}
+                      defaultValue="number"
                     >
                       <FormLabel>Loại size</FormLabel>
                       <FormControl>
@@ -195,9 +192,8 @@ export function ProductVariant({
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="us">US</SelectItem>
-                        <SelectItem value="uk">UK</SelectItem>
-                        <SelectItem value="cn">CN</SelectItem>
+                        <SelectItem value="number">Số</SelectItem>
+                        <SelectItem value="text">Chữ</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
