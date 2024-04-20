@@ -84,7 +84,7 @@ const CreateProductPage = ({ session }: any) => {
     productAmount: z.infer<typeof productSchema>
   ) => {
     const uploadUrlResponse = await fetch(
-      `${process.env.BACKEND_URL}/s3/image-upload-url?productName=${_.kebabCase(
+      `${process.env.BACKEND_URL}/s3/image-upload-url?productCode=${_.kebabCase(
         productAmount.productCode
       )}&volume=${previewUrls.length}`,
       {

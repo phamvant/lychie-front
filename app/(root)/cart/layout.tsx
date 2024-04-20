@@ -11,6 +11,7 @@ const getCartData = async (session: Session) => {
   });
 
   const products = await res.json();
+  console.log(products);
   return products;
 };
 
@@ -20,6 +21,8 @@ const CartPageLayout = async ({ children }: { children: React.ReactNode }) => {
   if (!session || !session.user) {
     return redirect("/");
   }
+
+  console.log(session);
 
   const products = await getCartData(session);
 

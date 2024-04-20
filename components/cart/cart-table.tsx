@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { PenIcon, TrashIcon } from "lucide-react";
 import { useSession } from "next-auth/react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ProductContext } from "../Providers";
@@ -49,6 +49,10 @@ const CartTable = ({ productsProp }: { productsProp: CartDto[] }) => {
     resolver: zodResolver(formSchema),
     defaultValues: {},
   });
+
+  useEffect(() => {
+    console.log(products);
+  }, [products]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setStatus("fetching");
@@ -93,7 +97,7 @@ const CartTable = ({ productsProp }: { productsProp: CartDto[] }) => {
       return;
     }
 
-    setStatus("success");
+    setStatus("idle");
     setOrderAmount((prev: number) => prev - 1);
     setProduct(
       products.filter((product) => product.cartProductId != cartProductId)
@@ -167,7 +171,7 @@ const CartTable = ({ productsProp }: { productsProp: CartDto[] }) => {
               {product.cartCustomerName}
             </TableCell>
             <TableCell className="flex justify-around">
-              <Dialog>
+              <Dialog onOpenChange={() => setStatus("idle")}>
                 <DialogTrigger asChild>
                   <Button className="w-10 p-0">
                     <PenIcon size={15} />

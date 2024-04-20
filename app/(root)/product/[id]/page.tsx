@@ -7,10 +7,22 @@ import { ImageField } from "@/components/product/image-field";
 import { ProductDetails } from "@/components/product/product-details";
 import { ProductPrice } from "@/components/product/product-price";
 import { ProductVariant } from "@/components/product/product-variant";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { productSchema } from "@/lib/zod/product-schema";
 import { getChangedFields } from "@/utils/get-changed-field";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { ReloadIcon } from "@radix-ui/react-icons";
 import { Session } from "next-auth";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -61,8 +73,100 @@ const fetchProductsData = async (session: Session, productId: string) => {
   }
 };
 
+const DeleteProductDialog = ({
+  productCode,
+  productId,
+  session,
+}: {
+  productCode: string;
+  productId: string;
+  session: Session;
+}) => {
+  const [deleteButtonStatus, setDeleteButtonStatus] = useState<string>("idle");
+  const [deleteProductMessage, setDeleteProductMessage] = useState<string>("");
+
+  const onClickDelete = async () => {
+    try {
+      const deleteResponse = await fetch(
+        process.env.BACKEND_URL + `/product/delete`,
+        {
+          method: "PUT",
+          body: JSON.stringify({ productId }),
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${session.backendTokens.accessToken}`,
+          },
+        }
+      );
+
+      if (!deleteResponse.ok) {
+        setDeleteButtonStatus("failed");
+        const responseMessage = await deleteResponse.json();
+        setDeleteProductMessage(responseMessage.message);
+
+        throw new Error();
+      }
+
+      setDeleteButtonStatus("success");
+    } catch (error) {
+      setDeleteButtonStatus("error");
+      console.error("Error during concurrent requests:", error);
+    }
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <Button size="sm" type="button" variant="destructive">
+          Xoá sản phẩm
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="w-30 rounded-lg">
+        <DialogHeader>
+          <DialogTitle className="mt-5">
+            Xoá sản phẩm : {productCode}
+          </DialogTitle>
+        </DialogHeader>
+        <DialogDescription>Bạn có muốn xoá sản phẩm?</DialogDescription>
+        <Button
+          disabled={deleteButtonStatus === "fetching"}
+          variant={deleteButtonStatus === "error" ? "destructive" : "secondary"}
+          size="sm"
+          onClick={onClickDelete}
+          type="button"
+        >
+          {deleteButtonStatus === "fetching" ? (
+            <>
+              <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              Loading
+            </>
+          ) : (
+            ""
+          )}
+          {deleteButtonStatus === "success" ? (
+            <span className="text-green-500">Đã xoá</span>
+          ) : (
+            ""
+          )}
+          {deleteButtonStatus === "error" ? (
+            <span>{deleteProductMessage}!</span>
+          ) : (
+            ""
+          )}
+          {deleteButtonStatus === "idle" ? (
+            <span className="text-red-500">Xoá sản phẩm</span>
+          ) : (
+            ""
+          )}
+        </Button>
+        <DialogFooter className="sm:justify-start"></DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 const ModifyProductPage = ({ session, productId }: any) => {
-  const [status, setStatus] = useState<string>("idle");
+  const [updateButtonStatus, setUpdateButtonStatus] = useState<string>("idle");
   const [product, setProduct] = useState<ProductDto>(initialProduct);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -84,13 +188,6 @@ const ModifyProductPage = ({ session, productId }: any) => {
       productIsPosted: product.productIsPosted,
     },
   });
-
-  // const onCategoryChange = () => {
-  //   const code = codeGenerate(
-  //     form.getValues("productCategory") as keyof typeof categoryToCode,
-  //     form.getValues("productSubCategory") as keyof typeof categoryToCode
-  //   );
-  // };
 
   useEffect(() => {
     setIsLoading(true);
@@ -152,7 +249,7 @@ const ModifyProductPage = ({ session, productId }: any) => {
   };
 
   const onSubmit = async (values: z.infer<typeof productSchema>) => {
-    setStatus("fetching");
+    setUpdateButtonStatus("fetching");
     const { productId, productImages, ...submitField } = product;
 
     const queryObj = getChangedFields(submitField, values);
@@ -162,7 +259,7 @@ const ModifyProductPage = ({ session, productId }: any) => {
       const modifyProductResponse = await modifyObject(queryObj);
 
       if (!modifyProductResponse.ok) {
-        setStatus("failed");
+        setUpdateButtonStatus("failed");
         // Handle registration request error
         console.error(
           "Error modify product:",
@@ -172,9 +269,9 @@ const ModifyProductPage = ({ session, productId }: any) => {
         throw new Error();
       }
 
-      setStatus("success");
+      setUpdateButtonStatus("success");
     } catch (error) {
-      setStatus("error");
+      setUpdateButtonStatus("error");
       console.error("Error during concurrent requests:", error);
     }
   };
@@ -202,14 +299,21 @@ const ModifyProductPage = ({ session, productId }: any) => {
                   <CardTitle>Cập nhật sản phẩm</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <StateButton
-                    status={status}
-                    state={{
-                      done: "Cập nhật thành công",
-                      error: "Lỗi lưu sản phẩm",
-                      idle: "Cập nhật sản phẩm",
-                    }}
-                  />
+                  <div className="flex justify-between">
+                    <StateButton
+                      status={updateButtonStatus}
+                      state={{
+                        done: "Cập nhật thành công",
+                        error: "Lỗi lưu sản phẩm",
+                        idle: "Cập nhật sản phẩm",
+                      }}
+                    />
+                    <DeleteProductDialog
+                      productCode={product.productCode}
+                      productId={productId}
+                      session={session}
+                    />
+                  </div>
                 </CardContent>
               </Card>
             </div>
