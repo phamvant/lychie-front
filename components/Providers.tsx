@@ -2,8 +2,6 @@
 
 import { CartDto } from "@/models/cart-dto";
 import { CategoryDto } from "@/models/category-dto";
-import { UserDto } from "@/models/user-dto";
-import { Session } from "next-auth";
 import { SessionProvider, useSession } from "next-auth/react";
 import { createContext, useEffect, useState } from "react";
 
@@ -11,12 +9,10 @@ interface Props {
   children: React.ReactNode;
 }
 
-export const CategoryContext = createContext<{
+export const ProductContext = createContext<{
   categories: any;
   cartNumber: any;
-  session: Session | null;
-  // userProductsAmount: number | undefined;
-}>({ categories: [], session: null, cartNumber: 0 });
+}>({ categories: [], cartNumber: 0 });
 
 export const Providers = ({ children }: Props) => {
   return <SessionProvider>{children}</SessionProvider>;
@@ -25,7 +21,7 @@ export const Providers = ({ children }: Props) => {
 export const ContextProvider = ({ children }: Props) => {
   const [categories, setCategories] = useState<CategoryDto[]>();
   const [cartNumber, setCartNumber] = useState<number>();
-  const [user, setUser] = useState<UserDto>();
+  // const [user, setUser] = useState<UserDto>();
   const { data: session, status } = useSession();
 
   useEffect(() => {
@@ -82,15 +78,13 @@ export const ContextProvider = ({ children }: Props) => {
   }, [session]);
 
   return (
-    <CategoryContext.Provider
+    <ProductContext.Provider
       value={{
         categories: [categories, setCategories],
-        session: session,
         cartNumber: [cartNumber, setCartNumber],
-        // userProductsAmount: user?.userProductsAmount,
       }}
     >
       {children}{" "}
-    </CategoryContext.Provider>
+    </ProductContext.Provider>
   );
 };

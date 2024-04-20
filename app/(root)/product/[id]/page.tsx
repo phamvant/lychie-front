@@ -199,7 +199,7 @@ const ModifyProductPage = ({ session, productId }: any) => {
                 className="bg-white max-w-sm lg:max-w-xl"
               >
                 <CardHeader>
-                  <CardTitle>Lưu sản phẩm</CardTitle>
+                  <CardTitle>Cập nhật sản phẩm</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <StateButton

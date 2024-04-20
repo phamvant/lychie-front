@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/form";
 import { useSession } from "next-auth/react";
 import { useContext, useState } from "react";
-import { CategoryContext } from "../Providers";
+import { ProductContext } from "../Providers";
 import { Input } from "../ui/input";
 import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group";
 
@@ -40,7 +40,7 @@ const formSchema = z.object({
 });
 
 export const AddToCardButton = ({ props }: any) => {
-  const { cartNumber } = useContext(CategoryContext);
+  const { cartNumber } = useContext(ProductContext);
   const [orderAmount, setOrderAmount] = cartNumber;
   const [status, setStatus] = useState<string>("idle");
   const { data: session } = useSession();

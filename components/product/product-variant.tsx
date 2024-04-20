@@ -2,7 +2,7 @@
 
 import { CategoryDto } from "@/models/category-dto";
 import { useContext, useEffect, useState } from "react";
-import { CategoryContext } from "../Providers";
+import { ProductContext } from "../Providers";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import {
   FormControl,
@@ -45,7 +45,7 @@ export function ProductVariant({
   form: any;
   onCategoryChange?: any;
 }) {
-  const { categories } = useContext(CategoryContext);
+  const { categories } = useContext(ProductContext);
   const [displayCategories, setDisplayCategories] = categories;
   const [selectedCategory, setSelectedCategory] = useState<CategoryDto>();
   const [sizeType, setSizeType] = useState<string[]>(SIZE1);

@@ -1,7 +1,7 @@
 "use client";
 import { Form } from "@/components/ui/form";
 
-import { CategoryContext } from "@/components/Providers";
+import { ProductContext } from "@/components/Providers";
 import { StateButton } from "@/components/button/three-states-button";
 import { ImageField } from "@/components/product/image-field";
 import { ProductDetails } from "@/components/product/product-details";
@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const CreateProductPage = ({ session }: any) => {
-  const { categories } = useContext(CategoryContext);
+  const { categories } = useContext(ProductContext);
   const [status, setStatus] = useState<string>("idle");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previewUrls, setPreviewUrls] = useState([]);

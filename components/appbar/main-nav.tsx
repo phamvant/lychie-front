@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 import { useContext } from "react";
-import { CategoryContext } from "../Providers";
+import { ProductContext } from "../Providers";
 export const navBarContent = [
   {
     title: "Overview",
@@ -28,7 +28,7 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
 }
 
 const MainNav = ({ className, isLogged, ...props }: Props) => {
-  const { cartNumber } = useContext(CategoryContext);
+  const { cartNumber } = useContext(ProductContext);
   const [orderAmount, setOrderAmount] = cartNumber;
 
   return (

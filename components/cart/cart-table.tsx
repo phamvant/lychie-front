@@ -5,11 +5,11 @@ import { addThousandSeparator } from "@/utils/thousands-separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { PenIcon, TrashIcon } from "lucide-react";
-import { Session } from "next-auth";
-import { useContext, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { CategoryContext } from "../Providers";
+import { ProductContext } from "../Providers";
 import { StateButton } from "../button/three-states-button";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -38,27 +38,17 @@ const formSchema = z.object({
   cartProductAmount: z.coerce.number(),
 });
 
-const CartTable = ({
-  productsProp,
-  session,
-}: {
-  productsProp: CartDto[];
-  session: Session;
-}) => {
-  const { cartNumber } = useContext(CategoryContext);
+const CartTable = ({ productsProp }: { productsProp: CartDto[] }) => {
+  const { data: session } = useSession();
+
+  const { cartNumber } = useContext(ProductContext);
   const [orderAmount, setOrderAmount] = cartNumber;
-  const [products, setProduct] = useState<CartDto[]>([]);
+  const [products, setProduct] = useState<CartDto[]>(productsProp);
   const [status, setStatus] = useState<string>("idle");
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {},
   });
-
-  useEffect(() => {
-    if (productsProp) {
-      setProduct(productsProp);
-    }
-  }, []);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setStatus("fetching");
@@ -67,7 +57,7 @@ const CartTable = ({
       body: JSON.stringify(values),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${session.backendTokens.accessToken}`,
+        Authorization: `Bearer ${session?.backendTokens.accessToken}`,
       },
     });
 
@@ -77,6 +67,14 @@ const CartTable = ({
     }
 
     setStatus("success");
+    setProduct(
+      products.map((product) => {
+        if (product.cartProductId == values.cartProductId) {
+          return { ...product, cartProductAmount: values.cartProductAmount };
+        }
+        return product;
+      })
+    );
   };
 
   const onDelete = async (cartProductId: string) => {
@@ -86,7 +84,7 @@ const CartTable = ({
       body: JSON.stringify({ cartProductId }),
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${session.backendTokens.accessToken}`,
+        Authorization: `Bearer ${session?.backendTokens.accessToken}`,
       },
     });
 
