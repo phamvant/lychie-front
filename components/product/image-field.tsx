@@ -1,6 +1,7 @@
 import { Upload } from "lucide-react";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 
 export const ImageField = ({
   images,
@@ -19,28 +20,59 @@ export const ImageField = ({
       </CardHeader>
       <CardContent>
         <div className="grid gap-2">
-          <Image
-            alt="Product image"
-            className="aspect-square w-full rounded-md object-cover"
-            height="300"
-            unoptimized={true}
-            src={images[0] || "/placeholder.svg"}
-            width="300"
-          />
+          <Dialog>
+            <DialogTrigger asChild>
+              <Image
+                alt="Product image"
+                className="aspect-square w-full rounded-md object-cover"
+                height="300"
+                unoptimized={true}
+                src={images[0] || "/placeholder.svg"}
+                width="300"
+              />
+            </DialogTrigger>
+            <DialogContent>
+              <Image
+                alt="Product image"
+                className="w-full rounded-md object-cover"
+                width={0}
+                height={0}
+                unoptimized={true}
+                src={images[0] || "/placeholder.svg"}
+              />
+            </DialogContent>
+          </Dialog>
+
           <div className="grid grid-cols-3 gap-2">
             {images
               .filter((value, index) => index !== 0)
               .map((url, index) => (
-                <Image
-                  priority={true}
-                  key={index}
-                  alt="Product image"
-                  className="aspect-square w-full rounded-md object-cover"
-                  height="84"
-                  unoptimized={true}
-                  src={url || "/placeholder.svg"}
-                  width="84"
-                />
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Image
+                      priority={true}
+                      key={index}
+                      alt="Product image"
+                      className="aspect-square w-full rounded-md object-cover"
+                      height="84"
+                      unoptimized={true}
+                      src={url || "/placeholder.svg"}
+                      width="84"
+                    />
+                  </DialogTrigger>
+                  <DialogContent>
+                    <Image
+                      priority={true}
+                      key={index}
+                      alt="Product image"
+                      className=" w-full rounded-md object-cover"
+                      height={0}
+                      unoptimized={true}
+                      src={url || "/placeholder.svg"}
+                      width={0}
+                    />
+                  </DialogContent>
+                </Dialog>
               ))}
 
             <label

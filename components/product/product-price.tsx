@@ -50,7 +50,7 @@ export const ProductPrice = ({ form }: { form: any }) => {
         break;
     }
 
-    form.setValue("productFinalPrice", finalPrice);
+    form.setValue("productFinalPrice", Math.round(finalPrice / 1000) * 1000);
   };
 
   return (
