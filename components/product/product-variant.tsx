@@ -35,8 +35,8 @@ const COLOR = [
   "Đen",
 ];
 
-const SIZE1 = ["34", "35", "36", "37", "38", "39", "40"];
-const SIZE2 = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
+const SIZE1 = ["34", "35", "36", "37", "38", "39", "40", "Free"];
+const SIZE2 = ["XS", "S", "M", "L", "XL", "2XL", "3XL", "Free"];
 
 export function ProductVariant({
   form,
