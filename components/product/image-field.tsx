@@ -23,6 +23,7 @@ export const ImageField = ({
             alt="Product image"
             className="aspect-square w-full rounded-md object-cover"
             height="300"
+            unoptimized={true}
             src={images[0] || "/placeholder.svg"}
             width="300"
           />
@@ -36,6 +37,7 @@ export const ImageField = ({
                   alt="Product image"
                   className="aspect-square w-full rounded-md object-cover"
                   height="84"
+                  unoptimized={true}
                   src={url || "/placeholder.svg"}
                   width="84"
                 />

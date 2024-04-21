@@ -64,6 +64,7 @@ export function ProductImage({
           src={product.productImages[0] || "/placeholder.svg"}
           alt={product.productCode}
           width={width}
+          unoptimized={true}
           priority={true}
           height={height}
           className={cn(
