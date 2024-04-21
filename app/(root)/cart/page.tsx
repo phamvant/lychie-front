@@ -18,7 +18,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { authOptions } from "@/lib/auth";
 import { ListFilter } from "lucide-react";
+import { Session, getServerSession } from "next-auth";
 
 const Filter = () => {
   return (
@@ -40,9 +42,12 @@ const Filter = () => {
   );
 };
 
-const getCartData = async () => {
+const getCartData = async (session: Session) => {
   const res = await fetch(`${process.env.BACKEND_URL}/cart`, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${session.backendTokens.accessToken}`,
+    },
   });
 
   const products = await res.json();
@@ -50,9 +55,13 @@ const getCartData = async () => {
 };
 
 const CartPage = async () => {
-  const products = await getCartData();
+  const session = await getServerSession(authOptions);
 
-  console.log(products);
+  if (!session) {
+    return <>Error</>;
+  }
+
+  const products = await getCartData(session);
 
   return (
     <main className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8 lg:grid-cols-2 xl:grid-cols-2 mx-36">

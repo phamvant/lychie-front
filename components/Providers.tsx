@@ -73,7 +73,6 @@ export const ContextProvider = ({ children }: Props) => {
     if (session) {
       fetchCategoryData();
       fetchCartData();
-      // getUserData();
     }
   }, [session]);
 

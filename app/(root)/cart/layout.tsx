@@ -8,10 +8,10 @@ const getCartData = async (session: Session) => {
     headers: {
       Authorization: `Bearer ${session.backendTokens.accessToken}`,
     },
+    cache: "no-store",
   });
 
   const products = await res.json();
-  console.log(products);
   return products;
 };
 
@@ -21,8 +21,6 @@ const CartPageLayout = async ({ children }: { children: React.ReactNode }) => {
   if (!session || !session.user) {
     return redirect("/");
   }
-
-  console.log(session);
 
   const products = await getCartData(session);
 

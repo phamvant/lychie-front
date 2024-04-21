@@ -22,6 +22,14 @@ import {
 } from "../ui/select";
 
 export const ProductPrice = ({ form }: { form: any }) => {
+  const onChangeOriginPrice = () => {
+    form.setValue(
+      "productPrice",
+      Math.round((form.getValues("productCostPrice") * 140) / 100 / 1000) * 1000
+    );
+    onChangePrice();
+  };
+
   const onChangePrice = () => {
     let finalPrice = 0;
     switch (form.getValues("productDiscountType")) {
@@ -73,6 +81,7 @@ export const ProductPrice = ({ form }: { form: any }) => {
                           field.onChange(
                             removeThousandSeparator(e.target.value)
                           );
+                          onChangeOriginPrice();
                         }}
                         value={addThousandSeparator(field.value)}
                       />

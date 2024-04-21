@@ -59,7 +59,7 @@ export const ProductDetails = ({ form }: { form: any }) => {
               )}
             /> */}
           </div>
-          <div className="grid gap-3">
+          {/* <div className="grid gap-3">
             <FormField
               control={form.control}
               name="productDescription"
@@ -78,7 +78,7 @@ export const ProductDetails = ({ form }: { form: any }) => {
                 </FormItem>
               )}
             />
-          </div>
+          </div> */}
           <div className="grid gap-3">
             <FormField
               control={form.control}

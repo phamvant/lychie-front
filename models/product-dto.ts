@@ -2,7 +2,7 @@ export interface ProductDto {
   productId: string;
   productName?: string;
   productCode: string;
-  productDescription: string;
+  productDescription?: string;
   productCostPrice: number;
   productPrice: number;
   productFinalPrice: number;

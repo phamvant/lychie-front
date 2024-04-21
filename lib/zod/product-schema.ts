@@ -27,7 +27,7 @@ export const productSchema = z
   .object({
     productName: z.string().optional(),
     productCode: z.coerce.string(),
-    productDescription: z.string().trim().min(1, "Description is required"),
+    productDescription: z.string().optional(),
     productCostPrice: z.coerce.number().min(1, "Price is required"),
     productPrice: z.coerce.number().min(1, "Price is required"),
     productFinalPrice: z.coerce.number().min(1, "Calculate error"),

@@ -61,7 +61,7 @@ export function ProductImage({
     >
       <Link prefetch={true} href={`product/${product.productId}`}>
         <Image
-          src={product.productImages[0]}
+          src={product.productImages[0] || "/placeholder.svg"}
           alt={product.productCode}
           width={width}
           priority={true}
