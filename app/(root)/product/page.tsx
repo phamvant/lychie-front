@@ -20,6 +20,7 @@ const fetchProductsData = async (session: Session, page: number) => {
       headers: {
         Authorization: `Bearer ${session.backendTokens.accessToken}`,
       },
+      cache: "force-cache",
     });
 
     if (!productResponse.ok) {
@@ -35,7 +36,7 @@ const fetchProductsData = async (session: Session, page: number) => {
   }
 };
 
-const ProductPage = async () => {
+export default async function ProductPage() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
@@ -75,6 +76,4 @@ const ProductPage = async () => {
       </Card>
     </div>
   );
-};
-
-export default ProductPage;
+}

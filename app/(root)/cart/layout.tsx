@@ -22,8 +22,6 @@ const CartPageLayout = async ({ children }: { children: React.ReactNode }) => {
     return redirect("/");
   }
 
-  const products = await getCartData(session);
-
   return (
     <div className="flex content-center justify-around pt-8 ">{children}</div>
   );

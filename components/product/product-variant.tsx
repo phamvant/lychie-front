@@ -93,6 +93,9 @@ export function ProductVariant({
           </div>
         </CardHeader>
         <CardContent className="flex flex-col gap-6">
+          <div className="hidden items-end lg:flex">
+            <AddCategoryButton />
+          </div>
           <div className="grid gap-6 lg:grid-cols-3">
             <div className="grid gap-3">
               <FormField
@@ -199,10 +202,6 @@ export function ProductVariant({
                   </FormItem>
                 )}
               />
-            </div>
-
-            <div className="hidden items-end lg:flex">
-              <AddCategoryButton />
             </div>
           </div>
           <div className="flex flex-col gap-3">

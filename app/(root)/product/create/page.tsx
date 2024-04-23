@@ -225,7 +225,7 @@ const CreateProductPage = ({ session }: any) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
-          <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
+          <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8">
             <ProductDetails form={form} />
             <ProductVariant form={form} onCategoryChange={onCategoryChange} />
             <ProductPrice form={form} />

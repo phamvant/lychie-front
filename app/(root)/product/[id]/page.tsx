@@ -24,7 +24,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Session } from "next-auth";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ProductDto } from "../../../../models/product-dto";
@@ -280,17 +280,19 @@ const ModifyProductPage = ({ session, productId }: any) => {
     <div>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-36">
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-2 lg:gap-8 lg:px-10">
             <div className="grid auto-rows-max items-start gap-4 lg:col-span-1 lg:gap-8 ">
               <ProductDetails form={form} />
               <ProductVariant form={form} onCategoryChange={() => {}} />
               <ProductPrice form={form} />
             </div>
             <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-              <ImageField
-                images={product.productImages}
-                handleImageUpload={handleImageUpload}
-              />
+              <Suspense fallback={<p>Loading...</p>}>
+                <ImageField
+                  images={product.productImages}
+                  handleImageUpload={handleImageUpload}
+                />
+              </Suspense>
               <Card
                 x-chunk="dashboard-07-chunk-5"
                 className="bg-white max-w-sm lg:max-w-xl"
