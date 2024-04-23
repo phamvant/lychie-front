@@ -10,9 +10,10 @@ import {
 import { authOptions } from "@/lib/auth";
 import { Session, getServerSession } from "next-auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ProductDto } from "../../../models/product-dto";
 
-const fetchProductsData = async (session: Session) => {
+const fetchProductsData = async (session: Session, page: number) => {
   try {
     const productResponse = await fetch(`${process.env.BACKEND_URL}/product`, {
       method: "GET",
@@ -38,10 +39,10 @@ const ProductPage = async () => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return <>Error...</>;
+    return redirect("/");
   }
 
-  const productData = (await fetchProductsData(session)) as ProductDto[];
+  const productData = (await fetchProductsData(session, 1)) as ProductDto[];
 
   return (
     <div className="lg:px-20 flex flex-1">

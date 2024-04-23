@@ -11,7 +11,7 @@ export const navBarContent = [
   },
   {
     title: "Dashboard",
-    href: "/dashboard",
+    href: "/",
   },
   {
     title: "Product",

@@ -2,6 +2,7 @@ import { AppBar } from "@/components/appbar/app-bar";
 import { authOptions } from "@/lib/auth";
 import { ProductDto } from "@/models/product-dto";
 import { Session, getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 type Props = {
   children: React.ReactNode;
@@ -34,7 +35,7 @@ async function RootLayout({ children }: Props) {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return <>Error...</>;
+    return redirect("/");
   }
 
   const productData = (await fetchProductsData(session)) as ProductDto[];

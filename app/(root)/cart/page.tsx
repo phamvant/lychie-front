@@ -21,6 +21,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { authOptions } from "@/lib/auth";
 import { ListFilter } from "lucide-react";
 import { Session, getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
 const Filter = () => {
   return (
@@ -58,7 +59,7 @@ const CartPage = async () => {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return <>Error</>;
+    return redirect("/");
   }
 
   const products = await getCartData(session);

@@ -39,7 +39,9 @@ const ProductLayout = async ({ children }: { children: React.ReactNode }) => {
 
   const ret = await fetchProductsData(session);
 
-  if (!ret) return <>Error</>;
+  if (!ret) {
+    return redirect("/");
+  }
 
   return (
     <div className="flex content-center justify-around pt-8 ">{children}</div>
