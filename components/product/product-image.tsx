@@ -59,7 +59,7 @@ export function ProductImage({
       className={cn("space-y-3 flex flex-col rounded-xl p-2", className)}
       {...props}
     >
-      <Link prefetch={true} href={`product/${product.productId}`}>
+      <Link prefetch={false} href={`product/${product.productId}`}>
         <Image
           src={product.productImages[0] || "/placeholder.svg"}
           alt={product.productCode}
