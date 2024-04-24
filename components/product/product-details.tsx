@@ -26,9 +26,7 @@ export const ProductDetails = ({ form }: { form: any }) => {
                       className="rounded-full w-6 h-6"
                       id="productIsPosted"
                       onCheckedChange={field.onChange}
-                      // checked={field.value}
                       defaultChecked={field.value}
-                      // {...field}
                     />
                   </FormControl>
                 </div>

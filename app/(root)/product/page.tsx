@@ -55,12 +55,12 @@ export default async function ProductPage() {
           </Link>
         </CardHeader>
         <CardContent className="pr-0 lg:pr-6">
-          <div className="grid lg:grid-cols-4 grid-cols-2 lg:gap-x-12 lg:gap-y-20">
+          <div className="grid grid-cols-2 gap-y-12 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-12 lg:gap-y-20">
             {productData.map((product) => (
               <ProductImage
                 key={product.productId}
                 product={product}
-                className="lg:w-[240px] w-[150px]"
+                className="lg:w-[240px] md:w-[200px] w-[150px]"
                 aspectRatio="square"
                 width={150}
                 height={150}

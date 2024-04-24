@@ -26,6 +26,7 @@ const COLOR = [
   "Xanh lam",
   "Đỏ",
   "Vàng",
+  "Hồng",
   "Tím",
   "Cam",
   "Lục",

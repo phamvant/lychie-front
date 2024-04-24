@@ -25,16 +25,6 @@ const CreateProductPage = ({ session }: any) => {
   const [previewUrls, setPreviewUrls] = useState([]);
   const [productAmount, setProductAmount] = useState<number>(0);
 
-  const onCategoryChange = () => {
-    const code = codeGenerate(
-      form.getValues("productCategory"),
-      form.getValues("productSubCategory") as string,
-      categories[0]
-    ).toString();
-
-    form.setValue("productCode", code + productAmount);
-  };
-
   useEffect(() => {
     const getUserData = async () => {
       try {
@@ -80,6 +70,16 @@ const CreateProductPage = ({ session }: any) => {
     },
   });
 
+  const onCategoryChange = () => {
+    const code = codeGenerate(
+      form.getValues("productCategory"),
+      form.getValues("productSubCategory") as string,
+      categories[0]
+    ).toString();
+
+    form.setValue("productCode", code + productAmount);
+  };
+
   const getImageUploadUrl = async (
     productAmount: z.infer<typeof productSchema>
   ) => {
@@ -116,7 +116,6 @@ const CreateProductPage = ({ session }: any) => {
 
   const onSubmit = async (values: z.infer<typeof productSchema>) => {
     setStatus("fetching");
-    console.log(values);
     try {
       //----------------GET_URL----------------//
 
@@ -187,21 +186,7 @@ const CreateProductPage = ({ session }: any) => {
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newSelectedFiles = Array.from(event.target.files!) as File[]; // Type assertion for FileList
-
-    // newSelectedFiles.map((file) => {
-    //   new Compressor(file, {
-    //     quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
-    //     success: (compressedResult) => {
-    //       // compressedResult has the compressed file.
-    //       // Use the compressed file to upload the images to your server.
-    //       setSelectedFiles((prevFiles) => {
-    //         prevFiles.push(compressedResult as File);
-    //         return prevFiles;
-    //       });
-    //     },
-    //   });
-    // });
+    const newSelectedFiles = Array.from(event.target.files!) as File[];
 
     setSelectedFiles((prevFiles) => [...prevFiles, ...newSelectedFiles] as []);
 

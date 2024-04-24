@@ -18,6 +18,10 @@ export const navBarContent = [
     href: "/product",
   },
   {
+    title: "Discount",
+    href: "/product/discount",
+  },
+  {
     title: "Cart",
     href: "/cart",
   },

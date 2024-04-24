@@ -3,9 +3,10 @@
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { Button } from "../ui/button";
 
-export const StateButton = ({
+export const StateButtonNorm = ({
   status,
   state,
+  onClick,
 }: {
   status: string;
   state: {
@@ -13,6 +14,7 @@ export const StateButton = ({
     error: string;
     idle: string;
   };
+  onClick?: any;
 }) => {
   return (
     <Button
@@ -23,7 +25,8 @@ export const StateButton = ({
           : "default"
       }
       size="sm"
-      type="submit"
+      // type="button"
+      onClick={onClick}
     >
       {status === "fetching" ? (
         <>

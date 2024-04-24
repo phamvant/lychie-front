@@ -47,11 +47,10 @@ export const ImageField = ({
             {images
               .filter((value, index) => index !== 0)
               .map((url, index) => (
-                <Dialog>
+                <Dialog key={index}>
                   <DialogTrigger asChild>
                     <Image
                       priority={true}
-                      key={index}
                       alt="Product image"
                       className="aspect-square w-full rounded-md object-cover"
                       height="84"
