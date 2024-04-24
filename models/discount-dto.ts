@@ -3,4 +3,5 @@ export interface DiscountDto {
   discountDescription: string;
   discountType: string;
   disocuntAmount: number;
+  discountIsActive: boolean;
 }

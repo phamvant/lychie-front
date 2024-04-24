@@ -28,7 +28,6 @@ const DiscountPage = () => {
             headers: {
               Authorization: `Bearer ${session.backendTokens.accessToken}`,
             },
-            cache: "force-cache",
           }
         );
 
@@ -80,6 +79,34 @@ const DiscountPage = () => {
     }
   };
 
+  const activeDiscount = async (discountCode: string, isActive: boolean) => {
+    try {
+      const updateDiscountRes = await fetch(
+        `${process.env.BACKEND_URL}/discount/${
+          isActive ? "active" : "deactive"
+        }`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${session?.backendTokens.accessToken}`,
+          },
+          body: JSON.stringify({
+            discountCode: discountCode,
+          }),
+        }
+      );
+
+      if (!updateDiscountRes.ok) {
+        return !isActive;
+      }
+
+      return isActive;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div className="flex flex-1 h-screen w-full">
       <div className="flex flex-col w-full gap-6">
@@ -104,7 +131,12 @@ const DiscountPage = () => {
                     </div>
                   </div>
                 </DialogTrigger>
-                <Switch />
+                <Switch
+                  defaultChecked={discount.discountIsActive}
+                  onCheckedChange={(e) => {
+                    const ret = activeDiscount(discount.discountCode, e);
+                  }}
+                />
               </div>
 
               <DialogContent className="w-4/5 rounded-lg">
