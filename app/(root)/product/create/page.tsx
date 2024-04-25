@@ -22,7 +22,7 @@ const CreateProductPage = ({ session }: any) => {
   const { categories } = useContext(ProductContext);
   const [status, setStatus] = useState<string>("idle");
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [previewUrls, setPreviewUrls] = useState([]);
+  const [previewUrls, setPreviewUrls] = useState<string[]>([]);
   const [productAmount, setProductAmount] = useState<number>(0);
 
   useEffect(() => {
@@ -196,15 +196,41 @@ const CreateProductPage = ({ session }: any) => {
     setPreviewUrls((prevUrls) => [...prevUrls, ...newPreviewUrls] as []);
   };
 
-  // const removeImage = (index: number) => {
-  //   const updatedSelectedFiles = [...selectedFiles];
-  //   updatedSelectedFiles.splice(index, 1);
-  //   setSelectedFiles(updatedSelectedFiles);
+  const handleRemoveImage = (removeUrl: string) => {
+    let removeIndex: number = 0;
+    const updatedPreviewUrls = previewUrls.filter((url, index) => {
+      if (url != removeUrl) {
+        return url;
+      }
+      removeIndex = index;
+    });
+    setPreviewUrls(updatedPreviewUrls);
 
-  //   const updatedPreviewUrls = [...previewUrls];
-  //   updatedPreviewUrls.splice(index, 1);
-  //   setPreviewUrls(updatedPreviewUrls);
-  // };
+    const updatedSelectedFiles = selectedFiles.filter(
+      (value, index) => index != removeIndex
+    );
+    setSelectedFiles(updatedSelectedFiles);
+  };
+
+  const handleSelectPrimaryImage = (selectedUrl: string) => {
+    let selectedIndex: number = 0;
+    let updatedPreviewUrls = previewUrls.filter((url, index) => {
+      if (url != selectedUrl) {
+        return url;
+      }
+      selectedIndex = index;
+    });
+
+    setPreviewUrls([selectedUrl, ...updatedPreviewUrls]);
+
+    selectedFiles[0] = selectedFiles.splice(
+      selectedIndex,
+      1,
+      selectedFiles[0]
+    )[0];
+
+    setSelectedFiles(selectedFiles);
+  };
 
   return (
     <Form {...form}>
@@ -219,6 +245,9 @@ const CreateProductPage = ({ session }: any) => {
             <ImageField
               images={previewUrls}
               handleImageUpload={handleImageUpload}
+              handleImageDelete={handleRemoveImage}
+              deleteButtonStatus="idle"
+              handleChangePrimary={handleSelectPrimaryImage}
             />
             <Card
               x-chunk="dashboard-07-chunk-5"

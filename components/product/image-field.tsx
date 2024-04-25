@@ -1,14 +1,21 @@
 import { Upload } from "lucide-react";
 import Image from "next/image";
+import { StateButtonNorm } from "../button/three-states-nor-button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 
 export const ImageField = ({
   images,
   handleImageUpload,
+  handleImageDelete,
+  deleteButtonStatus,
+  handleChangePrimary,
 }: {
   images: string[];
   handleImageUpload: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleImageDelete: any;
+  deleteButtonStatus: string;
+  handleChangePrimary: any;
 }) => {
   return (
     <Card
@@ -39,6 +46,15 @@ export const ImageField = ({
                 height={0}
                 unoptimized={true}
                 src={images[0] || "/placeholder.svg"}
+              />{" "}
+              <StateButtonNorm
+                status={deleteButtonStatus}
+                state={{
+                  idle: "Xoá ảnh",
+                  error: "Lỗi",
+                  done: "Đã xoá",
+                }}
+                onClick={() => handleImageDelete(images[0])}
               />
             </DialogContent>
           </Dialog>
@@ -69,6 +85,24 @@ export const ImageField = ({
                       unoptimized={true}
                       src={url || "/placeholder.svg"}
                       width={0}
+                    />
+                    <StateButtonNorm
+                      status="idle"
+                      state={{
+                        idle: "Đặt ảnh chính",
+                        error: "Lỗi",
+                        done: "Thành công",
+                      }}
+                      onClick={() => handleChangePrimary(url)}
+                    />
+                    <StateButtonNorm
+                      status={deleteButtonStatus}
+                      state={{
+                        idle: "Xoá ảnh",
+                        error: "Lỗi",
+                        done: "Đã xoá",
+                      }}
+                      onClick={() => handleImageDelete(url)}
                     />
                   </DialogContent>
                 </Dialog>

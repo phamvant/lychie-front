@@ -14,7 +14,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import DeleteProductDialog from "@/components/product/delete-product-dialog";
 import { Session } from "next-auth";
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ProductDto } from "../../../../models/product-dto";
@@ -67,6 +67,7 @@ const ModifyProductPage = ({ session, productId }: any) => {
   const [updateButtonStatus, setUpdateButtonStatus] = useState<string>("idle");
   const [product, setProduct] = useState<ProductDto>(initialProduct);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [deleteButtonStatus, setDeleteButtonStatus] = useState<string>("idle");
 
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
@@ -174,6 +175,45 @@ const ModifyProductPage = ({ session, productId }: any) => {
     }
   };
 
+  const onDeleteImage = async (imageLink: string) => {
+    try {
+      setDeleteButtonStatus("fetching");
+      const deleteImgRes = await fetch(
+        process.env.BACKEND_URL + `/product/image/delete`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            productId: productId,
+            imageLink: imageLink,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${session?.backendTokens.accessToken}`,
+          },
+        }
+      );
+
+      if (!deleteImgRes.ok) {
+        console.log(deleteImgRes);
+        setDeleteButtonStatus("error");
+      }
+
+      setDeleteButtonStatus("success");
+      await setTimeout(() => setDeleteButtonStatus("idle"), 2000);
+      setProduct((prev) => {
+        return {
+          ...prev,
+          productImages: prev.productImages.filter(
+            (image) => image != imageLink
+          ),
+        };
+      });
+    } catch (error) {
+      console.log(error);
+      setDeleteButtonStatus("error");
+    }
+  };
+
   return (
     <div>
       <Form {...form}>
@@ -185,12 +225,13 @@ const ModifyProductPage = ({ session, productId }: any) => {
               <ProductPrice form={form} />
             </div>
             <div className="grid auto-rows-max items-start gap-4 lg:gap-8">
-              <Suspense fallback={<p>Loading...</p>}>
-                <ImageField
-                  images={product.productImages}
-                  handleImageUpload={handleImageUpload}
-                />
-              </Suspense>
+              <ImageField
+                images={product.productImages}
+                handleImageUpload={handleImageUpload}
+                handleImageDelete={onDeleteImage}
+                deleteButtonStatus={deleteButtonStatus}
+                handleChangePrimary={undefined}
+              />
               <Card
                 x-chunk="dashboard-07-chunk-5"
                 className="bg-white max-w-sm lg:max-w-xl"
