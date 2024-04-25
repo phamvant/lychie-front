@@ -6,7 +6,7 @@ import { useContext } from "react";
 import { ProductContext } from "../Providers";
 export const navBarContent = [
   {
-    title: "Overview",
+    title: "Landing",
     href: "/",
   },
   {

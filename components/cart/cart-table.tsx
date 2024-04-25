@@ -104,51 +104,61 @@ const CartTable = ({ productsProp }: { productsProp: CartDto[] }) => {
     <Table>
       <TableHeader>
         <TableRow>
-          <TableHead>Sản phẩm</TableHead>
-          <TableHead className="hidden sm:table-cell sm:text-center">
+          <TableHead className="text-center text-xs p-0 md:text-sm">
+            Sản phẩm
+          </TableHead>
+          <TableHead className="text-center text-xs p-0 md:text-sm">
             Kích cỡ
           </TableHead>
-          <TableHead className="hidden sm:table-cell sm:text-center">
+          <TableHead className="text-center text-xs p-0 md:text-sm">
             Màu sắc
           </TableHead>
-          <TableHead className="hidden md:table-cell sm:text-center">
+          <TableHead className="hidden md:table-cell text-center text-xs p-0 md:text-sm">
             Giá đơn
           </TableHead>
-          <TableHead className="hidden md:table-cell sm:text-center">
+          <TableHead className="text-center text-xs p-0 md:text-sm">
             Số lượng
           </TableHead>
-          <TableHead className="text-right sm:text-center">Tổng giá</TableHead>
-          <TableHead className="text-right sm:text-center">Khách</TableHead>
-          <TableHead className="text-right sm:text-center">Thao tác</TableHead>
+          <TableHead className="hidden md:table-cell text-center text-xs p-0 md:text-sm">
+            Tổng giá
+          </TableHead>
+          <TableHead className="text-center text-xs p-0 md:text-sm">
+            Khách
+          </TableHead>
+          <TableHead className="hidden md:table-cell text-center text-xs p-0 md:text-sm">
+            Thao tác
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {products.map((product, index) => (
           <TableRow key={index} className="">
             <TableCell>
-              <div className="text-lg">{product.cartProduct.productCode}</div>
+              <div className="text-center text-lg">
+                {product.cartProduct.productCode}
+              </div>
             </TableCell>
 
-            <TableCell className="hidden sm:table-cell sm:text-center text-md">
+            <TableCell className="text-center text-sm">
               {product.cartProductVariants.size}
             </TableCell>
-            <TableCell className="hidden sm:table-cell sm:text-center">
+            <TableCell className="text-center">
               <Badge className="text-md" variant="secondary">
                 {product.cartProductVariants.color}
               </Badge>
             </TableCell>
-            <TableCell className="hidden md:table-cell sm:text-center">
+            <TableCell className="hidden md:block text-center">
               <div className="font-medium">
                 {addThousandSeparator(product.cartProduct.productFinalPrice)}đ
               </div>
-              <div className="hidden text-xs text-muted-foreground md:inline line-through">
+              <div className="text-xs text-muted-foreground">
                 {addThousandSeparator(product.cartProduct.productPrice)}đ
               </div>
             </TableCell>
-            <TableCell className="flex justify-center">
-              <div className="font-medium">{product.cartProductAmount}</div>
+            <TableCell className="text-center">
+              <div>{product.cartProductAmount}</div>
             </TableCell>
-            <TableCell className="sm:text-center">
+            <TableCell className="hidden md:block text-center">
               <div className="font-medium">
                 {addThousandSeparator(
                   product.cartProduct.productFinalPrice *
@@ -156,17 +166,17 @@ const CartTable = ({ productsProp }: { productsProp: CartDto[] }) => {
                 )}
                 đ
               </div>
-              <div className="hidden text-xs text-muted-foreground md:inline line-through">
+              <div className="text-xs text-muted-foreground">
                 {addThousandSeparator(
                   product.cartProduct.productPrice * product.cartProductAmount
                 )}
                 đ
               </div>
             </TableCell>
-            <TableCell className="hidden sm:table-cell sm:text-center text-md">
+            <TableCell className="text-center text-md">
               {product.cartCustomerName}
             </TableCell>
-            <TableCell className="flex justify-around">
+            <TableCell className="hidden md:flex justify-around px-0 gap-2">
               <Dialog onOpenChange={() => setStatus("idle")}>
                 <DialogTrigger asChild>
                   <Button className="w-10 p-0">
@@ -215,7 +225,7 @@ const CartTable = ({ productsProp }: { productsProp: CartDto[] }) => {
                       />
                     </form>
                   </Form>
-                  <DialogFooter className="sm:justify-start"></DialogFooter>
+                  <DialogFooter className=""></DialogFooter>
                 </DialogContent>
               </Dialog>
 

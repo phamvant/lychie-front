@@ -143,7 +143,7 @@ const Dashboard = () => {
               <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
                 <Card className="col-span-4 hidden lg:block">
                   <CardHeader>
-                    <CardTitle>Overview</CardTitle>
+                    <CardTitle>Landing</CardTitle>
                   </CardHeader>
                   <CardContent className="pl-2">
                     <Overview />

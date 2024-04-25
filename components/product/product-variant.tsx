@@ -215,7 +215,7 @@ export function ProductVariant({
                   <ToggleGroup
                     type="multiple"
                     variant="outline"
-                    className="grid grid-cols-8 lg:grid-cols-12"
+                    className="grid grid-cols-8 lg:grid-cols-11 xl:grid-cols-12"
                     value={field.value}
                     onValueChange={(e) => {
                       field.onChange(e);

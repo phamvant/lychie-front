@@ -17,8 +17,8 @@ const UserNav = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
-            <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>SC</AvatarFallback>
+            <AvatarImage src="" alt="@shadcn" />
+            <AvatarFallback>L</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

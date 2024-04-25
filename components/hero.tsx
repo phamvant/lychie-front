@@ -8,10 +8,10 @@ const HeroHeader = () => {
       <div className="flex flex-1 flex-col items-center gap-4 text-center lg:gap-8">
         <div className="space-y-4 mt-32 backdrop-blur-md p-6 px-8 rounded-full">
           <h1 className="text-4xl font-bold lg:text-6xl text-white">
-            Landing pages
+            Lychie Shop
           </h1>
           <h2 className="text-lg font-light text-muted-foreground lg:text-3xl text-white">
-            Easy to setup. Customizable. Quick. Responsive.
+            Today is perfect day to become better
           </h2>
         </div>
         <Link
