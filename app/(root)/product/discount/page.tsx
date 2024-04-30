@@ -19,6 +19,10 @@ const DiscountPage = () => {
   const { data: session } = useSession();
 
   useEffect(() => {
+    console.log(process.env.BACKEND_URL);
+  }, []);
+
+  useEffect(() => {
     const fetchDiscountData = async (session: Session) => {
       try {
         const discountResponse = await fetch(

@@ -20,7 +20,6 @@ const fetchProductsData = async (session: Session, page: number) => {
       headers: {
         Authorization: `Bearer ${session.backendTokens.accessToken}`,
       },
-      cache: "force-cache",
     });
 
     if (!productResponse.ok) {

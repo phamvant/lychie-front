@@ -10,6 +10,7 @@ import dotenv from "dotenv";
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
 });
 dotenv.config();
 

@@ -7,11 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { useSession } from "next-auth/react";
 
 export default function SignInPage() {
-  const { data: session } = useSession();
-
   return (
     <div className="m-auto w-5/6 md:w-2/5 mt-10 ">
       <Card className="p-6">

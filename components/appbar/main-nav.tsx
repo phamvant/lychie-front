@@ -44,14 +44,14 @@ const MainNav = ({ className, isLogged, ...props }: Props) => {
         if (prop.title == "Cart") {
           return (
             <div className="relative" key={index}>
-              <div className="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-6 dark:border-gray-900">
+              <div className="absolute w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-6 dark:border-gray-900">
                 {orderAmount}
               </div>
               <Link
                 // key={index}
                 href={prop.href}
                 prefetch={true}
-                className={`text-sm font-medium transition-colors  hover:text-primary`}
+                className={`text-sm font-medium transition-colors hover:text-primary`}
               >
                 {prop.title}
               </Link>

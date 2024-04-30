@@ -1,15 +1,7 @@
-// /** @type {import('next').NextConfig} */
-// const nextConfig = {
-//   env: {
-//     BACKEND_URL: "https://ptops.xyz",
-//   },
-// };
-
-// module.exports = nextConfig;
-
 module.exports = {
   env: {
     BACKEND_URL: "https://ptops.xyz",
+    // BACKEND_URL: "http://localhost:8080",
   },
   images: {
     domains: [
