@@ -44,7 +44,10 @@ const MainNav = ({ className, isLogged, ...props }: Props) => {
         if (prop.title == "Cart") {
           return (
             <div className="relative" key={index}>
-              <div className="absolute w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-6 dark:border-gray-900">
+              <div
+                className="absolute w-6 h-6 text-center text-xs inline-flex items-center justify-center
+              text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-6 dark:border-gray-900"
+              >
                 {orderAmount}
               </div>
               <Link
