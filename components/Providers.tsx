@@ -21,7 +21,6 @@ export const Providers = ({ children }: Props) => {
 export const ContextProvider = ({ children }: Props) => {
   const [categories, setCategories] = useState<CategoryDto[]>();
   const [cartNumber, setCartNumber] = useState<number>();
-  // const [user, setUser] = useState<UserDto>();
   const { data: session, status } = useSession();
 
   useEffect(() => {

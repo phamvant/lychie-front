@@ -19,23 +19,23 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ProductDto } from "../../../../models/product-dto";
 
-const initialProduct: ProductDto = {
-  productId: "",
-  productName: "",
-  productCode: "",
-  productDescription: "",
-  productCostPrice: 0,
-  productPrice: 0,
-  productFinalPrice: 0,
-  productDiscountType: "",
-  productDiscountAmount: 0,
-  productCategory: "",
-  productSubCategory: "",
-  productVariants: {},
-  productImages: [""],
-  productMemo: "",
-  productIsPosted: false,
-};
+// const initialProduct: ProductDto = {
+//   productId: "",
+//   productName: "",
+//   productCode: "",
+//   productDescription: "",
+//   productCostPrice: 0,
+//   productPrice: 0,
+//   productFinalPrice: 0,
+//   productDiscountType: "",
+//   productDiscountAmount: 0,
+//   productCategory: "",
+//   productSubCategory: "",
+//   productVariants: {},
+//   productImages: [""],
+//   productMemo: "",
+//   productIsPosted: false,
+// };
 
 const fetchProductsData = async (session: Session, productId: string) => {
   try {
@@ -65,26 +65,26 @@ const fetchProductsData = async (session: Session, productId: string) => {
 
 const ModifyProductPage = ({ session, productId }: any) => {
   const [updateButtonStatus, setUpdateButtonStatus] = useState<string>("idle");
-  const [product, setProduct] = useState<ProductDto>(initialProduct);
+  const [product, setProduct] = useState<ProductDto | undefined>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [deleteButtonStatus, setDeleteButtonStatus] = useState<string>("idle");
 
   const form = useForm<z.infer<typeof productSchema>>({
     resolver: zodResolver(productSchema),
     defaultValues: {
-      productName: product.productName,
-      productCode: product.productCode,
-      productDescription: product.productDescription,
-      productCostPrice: product.productCostPrice,
-      productPrice: product.productPrice,
-      productFinalPrice: product.productFinalPrice,
-      productDiscountType: product.productDiscountType,
-      productDiscountAmount: product.productDiscountAmount,
-      productCategory: product.productCategory,
-      productSubCategory: product.productSubCategory,
-      productMemo: product.productMemo,
-      productVariants: product.productVariants,
-      productIsPosted: product.productIsPosted,
+      productName: product?.productName,
+      productCode: product?.productCode,
+      productDescription: product?.productDescription,
+      productCostPrice: product?.productCostPrice,
+      productPrice: product?.productPrice,
+      productFinalPrice: product?.productFinalPrice,
+      productDiscountType: product?.productDiscountType,
+      productDiscountAmount: product?.productDiscountAmount,
+      productCategory: product?.productCategory,
+      productSubCategory: product?.productSubCategory,
+      productMemo: product?.productMemo,
+      productVariants: product?.productVariants,
+      productIsPosted: product?.productIsPosted,
     },
   });
 
@@ -125,10 +125,6 @@ const ModifyProductPage = ({ session, productId }: any) => {
     getProduct();
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {};
 
   const modifyObject = async (queryObj: Record<string, any>) => {
@@ -149,29 +145,32 @@ const ModifyProductPage = ({ session, productId }: any) => {
 
   const onSubmit = async (values: z.infer<typeof productSchema>) => {
     setUpdateButtonStatus("fetching");
-    const { productId, productImages, ...submitField } = product;
 
-    const queryObj = getChangedFields(submitField, values);
-    console.log(queryObj);
+    if (product) {
+      const { productId, productImages, ...submitField } = product;
 
-    try {
-      const modifyProductResponse = await modifyObject(queryObj);
+      const queryObj = getChangedFields(submitField, values);
+      console.log(queryObj);
 
-      if (!modifyProductResponse.ok) {
-        setUpdateButtonStatus("failed");
-        // Handle registration request error
-        console.error(
-          "Error modify product:",
-          await modifyProductResponse.text()
-        );
+      try {
+        const modifyProductResponse = await modifyObject(queryObj);
 
-        throw new Error();
+        if (!modifyProductResponse.ok) {
+          setUpdateButtonStatus("failed");
+          // Handle registration request error
+          console.error(
+            "Error modify product:",
+            await modifyProductResponse.text()
+          );
+
+          throw new Error();
+        }
+
+        setUpdateButtonStatus("success");
+      } catch (error) {
+        setUpdateButtonStatus("error");
+        console.error("Error during concurrent requests:", error);
       }
-
-      setUpdateButtonStatus("success");
-    } catch (error) {
-      setUpdateButtonStatus("error");
-      console.error("Error during concurrent requests:", error);
     }
   };
 
@@ -201,18 +200,28 @@ const ModifyProductPage = ({ session, productId }: any) => {
       setDeleteButtonStatus("success");
       await setTimeout(() => setDeleteButtonStatus("idle"), 2000);
       setProduct((prev) => {
-        return {
-          ...prev,
-          productImages: prev.productImages.filter(
-            (image) => image != imageLink
-          ),
-        };
+        if (prev) {
+          return {
+            ...prev,
+            productImages: prev.productImages.filter(
+              (image) => image != imageLink
+            ),
+          };
+        }
       });
     } catch (error) {
       console.log(error);
       setDeleteButtonStatus("error");
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!product) {
+    return <>Not Found</>;
+  }
 
   return (
     <div>
