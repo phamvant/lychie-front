@@ -15,7 +15,7 @@ export const navBarContent = [
   },
   {
     title: "Product",
-    href: "/product",
+    href: "/product?page=1",
   },
   {
     title: "Discount",

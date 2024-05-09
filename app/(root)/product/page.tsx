@@ -12,15 +12,19 @@ import { Session, getServerSession } from "next-auth";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ProductDto } from "../../../models/product-dto";
+import { ProductPagination } from "@/components/product/product-paging";
 
 const fetchProductsData = async (session: Session, page: number) => {
   try {
-    const productResponse = await fetch(`${process.env.BACKEND_URL}/product`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${session.backendTokens.accessToken}`,
-      },
-    });
+    const productResponse = await fetch(
+      `${process.env.BACKEND_URL}/product/?page=${page}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${session.backendTokens.accessToken}`,
+        },
+      }
+    );
 
     if (!productResponse.ok) {
       throw new Error(
@@ -35,20 +39,34 @@ const fetchProductsData = async (session: Session, page: number) => {
   }
 };
 
-export default async function ProductPage() {
+export default async function ProductPage({
+  searchParams,
+}: {
+  searchParams?: {
+    page?: string;
+  };
+}) {
   const session = await getServerSession(authOptions);
+  const currentPage = Number(searchParams?.page) || 1;
 
   if (!session) {
     return redirect("/");
   }
 
-  const productData = (await fetchProductsData(session, 1)) as ProductDto[];
+  const productData = (await fetchProductsData(
+    session,
+    currentPage
+  )) as ProductDto[];
 
   return (
     <div className="lg:px-20 flex flex-1">
       <Card className="w-full border-none">
         <CardHeader className="flex flex-row justify-between items-center mb-10">
           <CardTitle>Sản phẩm</CardTitle>
+          <ProductPagination
+            currentPage={currentPage}
+            isLastPage={productData.length < 8 ? true : false}
+          />
           <Link className="text-md" href={`/product/create`}>
             <Button>Tạo sản phẩm</Button>
           </Link>
@@ -67,11 +85,6 @@ export default async function ProductPage() {
             ))}
           </div>
         </CardContent>
-        <CardFooter>
-          <div className="text-xs text-muted-foreground">
-            Showing <strong>1-10</strong> of <strong>32</strong> products
-          </div>
-        </CardFooter>
       </Card>
     </div>
   );
