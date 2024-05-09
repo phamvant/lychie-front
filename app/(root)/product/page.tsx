@@ -61,9 +61,10 @@ export default async function ProductPage({
   return (
     <div className="lg:px-20 flex flex-1">
       <Card className="w-full border-none">
-        <CardHeader className="flex flex-row justify-between items-center mb-10">
+        <CardHeader className="flex flex-row justify-between items-center md:mb-10">
           <CardTitle>Sản phẩm</CardTitle>
           <ProductPagination
+            className="hidden md:flex"
             currentPage={currentPage}
             isLastPage={productData.length < 8 ? true : false}
           />
@@ -71,6 +72,11 @@ export default async function ProductPage({
             <Button>Tạo sản phẩm</Button>
           </Link>
         </CardHeader>
+        <ProductPagination
+          className="md:hidden mb-5"
+          currentPage={currentPage}
+          isLastPage={productData.length < 8 ? true : false}
+        />
         <CardContent className="pr-0 lg:pr-6">
           <div className="grid grid-cols-2 gap-y-12 md:grid-cols-3 lg:grid-cols-4 lg:gap-x-12 lg:gap-y-20">
             {productData.map((product) => (

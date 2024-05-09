@@ -9,13 +9,17 @@ import {
   PaginationNext,
 } from "../ui/pagination";
 
-export function ProductPagination({
-  currentPage,
-  isLastPage,
-}: {
+interface Props extends React.HTMLAttributes<HTMLElement> {
+  classname?: React.HTMLAttributes<HTMLElement>;
   currentPage: number;
   isLastPage: boolean;
-}) {
+}
+
+export function ProductPagination({
+  className,
+  currentPage,
+  isLastPage,
+}: Props) {
   let index = [-1, 0, 1];
 
   if (isLastPage) {
@@ -27,7 +31,7 @@ export function ProductPagination({
   }
 
   return (
-    <Pagination>
+    <Pagination className={className}>
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
